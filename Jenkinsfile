@@ -16,6 +16,7 @@ pipeline {
             steps {
                 dir('Clique/Clique') {
                     sh 'docker build -t clique-app .'
+                }
             }
         }
         stage('Tag and Push to ECR') {
