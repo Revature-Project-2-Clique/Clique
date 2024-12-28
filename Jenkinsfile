@@ -12,6 +12,13 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Build Backend') {
+            steps {
+                dir('Clique/Clique') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 dir('Clique/Clique') {
