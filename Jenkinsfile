@@ -5,6 +5,8 @@ pipeline {
         ECR_REPO_URI = '851725174311.dkr.ecr.us-east-1.amazonaws.com/clique-app'
         ECS_CLUSTER = 'Project2Cluster'
         ECS_SERVICE = 'clique-app'
+        MAVEN_HOME = '/opt/maven'
+        PATH = "$MAVEN_HOME/bin:$PATH"
     }
     stages {
         stage('Checkout Code') {
