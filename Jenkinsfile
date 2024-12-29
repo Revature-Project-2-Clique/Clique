@@ -48,7 +48,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-credentials', keyFileVariable: 'SSH_KEY')]) {
                     sh """
                         chmod 600 \$SSH_KEY
-                        ssh -i \$SSH_KEY ec2-user@${TARGET_EC2} 'bash -s' < deploy.sh
+                        ssh -i \$SSH_KEY ec2-user@${TARGET_EC2}:/home/ec2-user/ 'bash -s' < deploy.sh
                     """
                 }
             }
