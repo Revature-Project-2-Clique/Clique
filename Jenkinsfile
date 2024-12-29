@@ -5,6 +5,7 @@ pipeline {
         ECR_REPO_URI = '851725174311.dkr.ecr.us-east-1.amazonaws.com/clique-app'
         ECS_CLUSTER = 'Project2Cluster'
         ECS_SERVICE = 'clique-app'
+        TARGET_EC2 = 'ec2-54-172-97-117.compute-1.amazonaws.com'
         MAVEN_HOME = '/opt/maven'
         PATH = "$MAVEN_HOME/bin:$PATH"
     }
@@ -42,12 +43,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to ECS') {
+        stage('Deploy on EC2') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '''
-                    aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment --region $AWS_REGION
-                    '''
+                withCredentials([string(credentialsId: 'ssh-key-credentials')]) {
+                    sh "ssh ec2-user@${TARGET_EC2} 'bash -s' < deploy.sh"
                 }
             }
         }
