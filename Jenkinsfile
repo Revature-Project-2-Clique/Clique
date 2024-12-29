@@ -44,12 +44,14 @@ pipeline {
             }
         }
         stage('Deploy on EC2') {
-            withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-credentials', keyFileVariable: 'SSH_KEY')]) {
-                sh """
-                    chmod 600 \$SSH_KEY
-                    ssh -i \$SSH_KEY ec2-user@${TARGET_EC2} 'bash -s' < deploy.sh
-                """
-        }
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-credentials', keyFileVariable: 'SSH_KEY')]) {
+                    sh """
+                        chmod 600 \$SSH_KEY
+                        ssh -i \$SSH_KEY ec2-user@${TARGET_EC2} 'bash -s' < deploy.sh
+                    """
+                }
+            }
         }
     }
 }
