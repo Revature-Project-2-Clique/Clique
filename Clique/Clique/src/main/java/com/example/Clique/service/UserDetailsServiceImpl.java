@@ -13,8 +13,12 @@ import com.example.Clique.repository.UsersRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
     
-    @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    public UserDetailsServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
