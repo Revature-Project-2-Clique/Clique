@@ -1,5 +1,7 @@
 package com.example.Clique.Entities;
 
+import org.hibernate.type.TrueFalseConverter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,14 +24,16 @@ public class Users {
 
     private String last_name;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
+    @Column(unique = true)
     private String username;
 
     public Users() {
-        
+
     }
 
     public Users (String first_name, String last_name, String email, String password, String username) {
