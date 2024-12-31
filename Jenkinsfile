@@ -3,8 +3,6 @@ pipeline {
     environment {
         AWS_REGION = 'us-east-1' 
         ECR_REPO_URI = '851725174311.dkr.ecr.us-east-1.amazonaws.com/clique-app'
-        ECS_CLUSTER = 'Project2Cluster'
-        ECS_SERVICE = 'clique-app'
         TARGET_EC2 = 'ec2-3-82-150-19.compute-1.amazonaws.com'
         MAVEN_HOME = '/opt/maven'
         PATH = "$MAVEN_HOME/bin:$PATH"
