@@ -28,5 +28,15 @@ public class Users {
 
     private String username;
 
+    public Users() {
+        
+    }
 
+    public Users (String first_name, String last_name, String email, String password, String username) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+    }
 }
