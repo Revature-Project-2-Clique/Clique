@@ -26,4 +26,19 @@ public class UserService {
         usersRepository.save(user);
         return jwtUtil.generateToken(user.getUsername());
     }
+
+    public String loginUser(Users user) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loginUser'");
+    }
+
+    public static Users getUserByUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUserByUsername'");
+    }
+
+    public static Users getUserById(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUserByUsername'");
+    }
 }
