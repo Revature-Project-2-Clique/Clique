@@ -27,7 +27,7 @@ public class AuthController {
         return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body("User created");
     }
 
-    @PostMapping("/register")
+    @PostMapping("/login")
     private ResponseEntity<String> login(@RequestBody Users user) {
         String token = userService.loginUser(user);
         return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body("User logged in");
