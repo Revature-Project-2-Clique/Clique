@@ -1,5 +1,6 @@
 package com.example.Clique.controller;
 
+import com.example.Clique.dto.UsersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,11 +26,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    private Long getUserId(Authentication auth) {
-        String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
-    }
-
     @PostMapping("/register")
     private ResponseEntity<String> register(@RequestBody Users user) {
         String token = userService.registerUser(user);
@@ -37,16 +33,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    private ResponseEntity<String> login(@RequestBody Users user) {
+    private ResponseEntity<UsersDTO> login(@RequestBody Users user) {
         String token = userService.loginUser(user);
-        return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body("User logged in");
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<String> updateUserProfile(Authentication auth, @RequestBody Users updateToUser) {
-        Long userId = getUserId(auth);
-        
-        return ResponseEntity.ok(userService.updateUserProfile(userId, updateToUser));
+        UsersDTO usersDTO = userService.mapToDTO(user);
+        return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body(usersDTO);
     }
 
 }
