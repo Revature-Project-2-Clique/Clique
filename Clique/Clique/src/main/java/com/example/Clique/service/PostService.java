@@ -27,7 +27,7 @@ public class PostService {
     public Posts createPost(Long userId, Posts post) {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'createPost'");
-        if (post.getPost_text().isEmpty() || post.getPost_text().length() > 255) {
+        if (post.getPostText().isEmpty() || post.getPostText().length() > 255) {
             return null;
         }
         if (usersRepository.findById(userId).isEmpty()) {
