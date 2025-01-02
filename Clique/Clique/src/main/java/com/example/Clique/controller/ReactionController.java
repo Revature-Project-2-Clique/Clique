@@ -10,6 +10,7 @@ import com.example.Clique.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -34,7 +35,7 @@ public class ReactionController {
         return ResponseEntity.ok(reactionService.likePost(userId, postId));
     }
 
-    @PostMapping("/unlike")
+    @DeleteMapping("/unlike")
     public ResponseEntity<String> unlikePost(Authentication auth, @RequestBody Long postId) {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(reactionService.unlikePost(userId, postId));

@@ -9,6 +9,6 @@ import com.example.Clique.Entities.Posts;
 
 @Repository
 public interface PostRepository extends JpaRepository<Posts, Long> {
-    Optional<Posts> findPostById(Long id);
+
 
 }

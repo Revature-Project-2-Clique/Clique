@@ -10,5 +10,5 @@ import com.example.Clique.Entities.Users;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long>{
     Optional<Users> findByUsername(String username);
-    Optional<Users> findByUserId(Long userId);
+    Optional<Users> findById(Long id);
 }
