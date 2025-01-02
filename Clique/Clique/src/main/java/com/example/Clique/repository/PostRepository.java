@@ -12,5 +12,5 @@ import com.example.Clique.Entities.Posts;
 public interface PostRepository extends JpaRepository<Posts, Long> {
     // Optional<Posts> findPostById(Long id);
 
-    List<Posts> findAllByPosterId(Long poster_id);
+    List<Posts> findAllByPosterId(Long posterId);
 }
