@@ -18,7 +18,7 @@ pipeline {
                 dir('clique-frontend') {
                     sh '''
                         yarn install
-                        npm run build
+                        yarn build
                     '''
                 }
             }
