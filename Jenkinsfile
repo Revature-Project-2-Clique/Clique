@@ -13,6 +13,23 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Build Frontend') {
+            steps {
+                dir('clique-frontend') {
+                    sh '''
+                        yarn install
+                        yarn build
+                    '''
+                }
+            }
+        }
+        stage('Deploy Frontend on S3') {
+            steps {
+                dir('clique-frontend') {
+                    sh 'aws s3 sync build/ s3://clique-app-bucket'
+                }
+            }
+        }
         stage('Build Backend') {
             steps {
                 dir('Clique/Clique') {
@@ -41,7 +58,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy on EC2') {
+        stage('Deploy Backend on EC2') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-credentials', keyFileVariable: 'SSH_KEY')]) {
                     sh """
