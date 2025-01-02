@@ -16,14 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SearchController {
 
      private final SearchService searchService;
+     private final UserService userService;
 
-    public SearchController(SearchService searchService) {
+    public SearchController(SearchService searchService, UserService userService) {
         this.searchService = searchService;
+        this.userService = userService;
     }
 
     private Long getUserId(Authentication auth){
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return userService.getUserByUsername(username).getUserId();
     }
 
     @GetMapping("/users")

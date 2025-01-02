@@ -21,14 +21,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CommentController {
 
     private final CommentService commentService;
+    private final UserService userService;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, UserService userService) {
         this.commentService = commentService;
+        this.userService = userService;
     }
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return userService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping("/add")

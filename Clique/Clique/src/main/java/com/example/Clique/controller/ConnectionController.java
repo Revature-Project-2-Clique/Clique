@@ -19,14 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ConnectionController {
 
     private final ConnectionService connectionService;
+    private final UserService userService;
 
-    public ConnectionController(ConnectionService connectionService) {
+    public ConnectionController(ConnectionService connectionService, UserService userService) {
         this.connectionService = connectionService;
+        this.userService = userService;
     }
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return userService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping("/follow")
