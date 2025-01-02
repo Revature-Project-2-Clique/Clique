@@ -8,16 +8,19 @@ import com.example.Clique.Entities.Comments;
 import com.example.Clique.repository.CommentRepository;
 import com.example.Clique.repository.PostRepository;
 import com.example.Clique.repository.UsersRepository;
+import com.example.Clique.security.JwtUtil;
 
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final UsersRepository userRepository;
+    private CommentRepository commentRepository;
+    private PostRepository postRepository;
+    private UsersRepository userRepository;
+    private JwtUtil jwtUtil;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository,
+    public CommentService(JwtUtil jwtUtil, CommentRepository commentRepository, PostRepository postRepository,
             UsersRepository userRepository) {
+        this.jwtUtil = jwtUtil;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.userRepository = userRepository;

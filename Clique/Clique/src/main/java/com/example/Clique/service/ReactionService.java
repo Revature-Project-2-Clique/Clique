@@ -5,16 +5,19 @@ import org.springframework.stereotype.Service;
 import com.example.Clique.repository.PostRepository;
 import com.example.Clique.repository.ReactionRepository;
 import com.example.Clique.repository.UsersRepository;
+import com.example.Clique.security.JwtUtil;
 
 @Service
 public class ReactionService {
 
-    private final ReactionRepository reactionRepository;
-    private final PostRepository postRepository;
-    private final UsersRepository userRepository;
+    private ReactionRepository reactionRepository;
+    private PostRepository postRepository;
+    private UsersRepository userRepository;
+    private JwtUtil jwtUtil;
 
-    public ReactionService(ReactionRepository reactionRepository, PostRepository postRepository,
+    public ReactionService(JwtUtil jwtUtil, ReactionRepository reactionRepository, PostRepository postRepository,
             UsersRepository userRepository) {
+        this.jwtUtil = jwtUtil;
         this.reactionRepository = reactionRepository;
         this.postRepository = postRepository;
         this.userRepository = userRepository;

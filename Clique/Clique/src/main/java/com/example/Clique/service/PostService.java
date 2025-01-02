@@ -2,11 +2,14 @@ package com.example.Clique.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
 import com.example.Clique.repository.PostRepository;
 import com.example.Clique.security.JwtUtil;
 
+@Service
 public class PostService {
 
     private JwtUtil jwtUtil;

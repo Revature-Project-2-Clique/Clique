@@ -4,14 +4,18 @@ import org.springframework.stereotype.Service;
 
 import com.example.Clique.repository.ConnectionRepository;
 import com.example.Clique.repository.UsersRepository;
+import com.example.Clique.security.JwtUtil;
 
 @Service
 public class ConnectionService {
 
-    private final ConnectionRepository connectionRepository;
-    private final UsersRepository userRepository;
+    private ConnectionRepository connectionRepository;
+    private UsersRepository userRepository;
+    private JwtUtil jwtUtil;
 
-    public ConnectionService(ConnectionRepository connectionRepository, UsersRepository userRepository) {
+
+    public ConnectionService(JwtUtil jwtUtil, ConnectionRepository connectionRepository, UsersRepository userRepository) {
+        this.jwtUtil = jwtUtil;
         this.connectionRepository = connectionRepository;
         this.userRepository = userRepository;
     }
