@@ -1,6 +1,7 @@
 package com.example.Clique.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,10 @@ public class UserService {
     public static Users getUserById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getUserByUsername'");
+    }
+
+    public String updateUserProfile(Long userId, Users updateToUser) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateUserProfile'");
     }
 }
