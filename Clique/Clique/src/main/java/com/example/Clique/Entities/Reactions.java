@@ -12,11 +12,16 @@ public class Reactions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reaction_id;
+    private Long reactionId;
 
-    private Long post_id;
+    private Long postId;
 
-    private Long comment_id;
+    private Long commentId;
 
-    private Long reactor_id;
+    private Long reactorId;
+    
+    private ReactionType reactionType;
+
+
+    
 }
