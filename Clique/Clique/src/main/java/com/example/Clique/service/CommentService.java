@@ -1,7 +1,9 @@
 package com.example.Clique.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Comments;
@@ -18,6 +20,7 @@ public class CommentService {
     private UsersRepository userRepository;
     private JwtUtil jwtUtil;
 
+    @Autowired
     public CommentService(JwtUtil jwtUtil, CommentRepository commentRepository, PostRepository postRepository,
             UsersRepository userRepository) {
         this.jwtUtil = jwtUtil;
@@ -27,17 +30,25 @@ public class CommentService {
     }
 
     public String createComment(Long userId, Long postId, String content) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createComment'");
+        Comments comment = new Comments();
+        comment.setPoster_id(userId);
+        comment.setPost_id(postId);
+        comment.setComment_text(content);
+        comment.setPosted_Time(LocalDateTime.now());
+        commentRepository.save(comment);
+        return "comment added";
     }
 
     public List<Comments> getComments(Long userId, Long postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getComments'");
+        return commentRepository.findByPost_id(postId);
     }
 
     public String deleteComment(Long userId, Long commentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteComment'");
+        
+        if (commentRepository.existsById(commentId)) {
+            commentRepository.deleteById(commentId);
+            return "Comment deleted";
+        }
+        return "No such comment exist";
     }
 }
