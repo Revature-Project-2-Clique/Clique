@@ -15,6 +15,7 @@ import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
 import com.example.Clique.service.PostService;
 import com.example.Clique.service.UserService;
+
 @RestController
 @RequestMapping("/posts")
 public class PostController {

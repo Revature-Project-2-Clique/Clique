@@ -4,16 +4,16 @@ import java.util.List;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
-import com.example.Clique.repository.PostsRepository;
+import com.example.Clique.repository.PostRepository;
 import com.example.Clique.security.JwtUtil;
 
 public class PostService {
 
     private JwtUtil jwtUtil;
 
-    private PostsRepository postRepository;
+    private PostRepository postRepository;
 
-    public PostService(JwtUtil jwtUtil, PostsRepository postRepository){
+    public PostService(JwtUtil jwtUtil, PostRepository postRepository){
         this.jwtUtil = jwtUtil;
         this.postRepository = postRepository;
     }

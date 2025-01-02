@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.Clique.Entities.Posts;
 
 @Repository
-public interface PostsRepository extends JpaRepository<Posts, Long> {
+public interface PostRepository extends JpaRepository<Posts, Long> {
     Optional<Posts> findPostById(Long id);
 
 }
