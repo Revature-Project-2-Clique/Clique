@@ -23,11 +23,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
     public UserService(JwtUtil jwtUtil, UsersRepository usersRepository, AuthenticationManager authenticationManager) {
@@ -59,8 +59,14 @@ public class UserService {
         return usersRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Username does not exist"));
     }
 
-    public Users getUserById(Long id) {
-        return usersRepository.findByUserId(id).orElseThrow(() -> new RuntimeException("User with that ID does not exist"));
+    public UsersDTO getUserById(Long userId) {
+        Optional<Users> userOptional = usersRepository.findById(userId);
+        if(userOptional.isPresent()){
+            Users user = userOptional.get();
+            return mapToDTO(user);
+        } else {
+            throw new RuntimeException("Invalid user id");
+        }
     }
 
     public UsersDTO updateName(UpdateNameDTO updateNameDTO) {

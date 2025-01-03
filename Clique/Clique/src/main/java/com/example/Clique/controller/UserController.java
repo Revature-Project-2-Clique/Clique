@@ -6,6 +6,7 @@ import com.example.Clique.dto.UpdatePasswordDTO;
 import com.example.Clique.dto.UsersDTO;
 import com.example.Clique.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,16 @@ public class UserController {
     private Long getUserId(Authentication authentication) {
         String username = authentication.getName();
         return userService.getUserByUsername(username).getUserId();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UsersDTO> getUserById(@PathVariable Long id, Authentication auth) {
+        try {
+            UsersDTO usersDTO = userService.getUserById(id);
+            return ResponseEntity.ok(usersDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @PatchMapping("/update-name")
