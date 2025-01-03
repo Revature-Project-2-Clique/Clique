@@ -20,15 +20,17 @@ import com.example.Clique.service.UserService;
 @RequestMapping("/posts")
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
+    private final UserService userService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, UserService userService) {
         this.postService = postService;
+        this.userService = userService;
     }
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUserId();
+        return userService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping
