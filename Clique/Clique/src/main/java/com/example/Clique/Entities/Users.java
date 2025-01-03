@@ -36,9 +36,10 @@ public class Users {
 
     }
 
-    public Users (String first_name, String last_name, String email, String password, String username) {
-        this.firstName = first_name;
-        this.lastName = last_name;
+
+    public Users (String firstName, String lastName, String email, String password, String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;

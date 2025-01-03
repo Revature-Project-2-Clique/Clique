@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/reactions")
 public class ReactionController {
-    
+
     private final ReactionService reactionService;
     private final UserService userService;
 
@@ -49,6 +48,4 @@ public class ReactionController {
         return ResponseEntity.ok(reactionService.getLikesCount(userId, postId));
     }
 
-
-    
 }

@@ -28,7 +28,7 @@ public class PostController {
         this.userService = userService;
     }
 
-    private Long getUserId(Authentication auth){
+    private Long getUserId(Authentication auth) {
         String username = auth.getName();
         return userService.getUserByUsername(username).getUserId();
     }

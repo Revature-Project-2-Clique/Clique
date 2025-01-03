@@ -14,13 +14,12 @@ import com.example.Clique.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private UserService userService;
-    
+    private final UserService userService;
+
     @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;
@@ -29,7 +28,7 @@ public class AuthController {
     @PostMapping("/register")
     private ResponseEntity<String> register(@RequestBody Users user) {
         String token = userService.registerUser(user);
-        return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body("User created");
+        return ResponseEntity.status(200).header("Authorization", "Bearer " + token).body("User created");
     }
 
     @PostMapping("/login")

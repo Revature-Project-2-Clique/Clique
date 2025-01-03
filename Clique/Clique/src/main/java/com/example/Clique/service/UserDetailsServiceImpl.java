@@ -11,8 +11,8 @@ import com.example.Clique.Entities.Users;
 import com.example.Clique.repository.UsersRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
-    
+public class UserDetailsServiceImpl implements UserDetailsService {
+
     private UsersRepository usersRepository;
 
     @Autowired
@@ -22,16 +22,18 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users appUser = usersRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Users appUser = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return User.builder()
-                    .username(appUser.getUsername())
-                    .password(appUser.getPassword())
-                    .roles("USER")
-                    .build();
+                .username(appUser.getUsername())
+                .password(appUser.getPassword())
+                .roles("USER")
+                .build();
     }
 
     public Long getUserIdByUsername(String username) throws UsernameNotFoundException {
-        Users appUser = usersRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return appUser.getUser_id();
+        Users appUser = usersRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return appUser.getUserId();
     }
 }
