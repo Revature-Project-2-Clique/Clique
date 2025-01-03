@@ -22,13 +22,13 @@ public class PostController {
 
     private PostService postService;
 
-    public PostController(PostService postService){
+    public PostController(PostService postService) {
         this.postService = postService;
     }
 
-    private Long getUserId(Authentication auth){
+    private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return UserService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping

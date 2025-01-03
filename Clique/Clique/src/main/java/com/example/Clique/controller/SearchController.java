@@ -10,20 +10,19 @@ import com.example.Clique.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/search")
 public class SearchController {
 
-     private final SearchService searchService;
+    private final SearchService searchService;
 
     public SearchController(SearchService searchService) {
         this.searchService = searchService;
     }
 
-    private Long getUserId(Authentication auth){
+    private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return UserService.getUserByUsername(username).getUserId();
     }
 
     @GetMapping("/users")
@@ -37,5 +36,5 @@ public class SearchController {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(searchService.searchPosts(userId, query));
     }
-    
+
 }
