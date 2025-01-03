@@ -10,7 +10,7 @@ import com.example.Clique.Entities.Reactions;
 @Repository
 public interface ReactionRepository extends JpaRepository<Reactions, Long> {
 
-    Optional<Reactions> findByUserIdAndPostId(Long userId, Long postId);
+    Optional<Reactions> findByReactorIdAndPostId(Long userId, Long postId);
 
     Long countByPostId(Long postId);
 

@@ -20,9 +20,9 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private String first_name;
+    private String firstName;
 
-    private String last_name;
+    private String lastName;
 
     @Column(unique = true)
     private String email;
@@ -36,9 +36,9 @@ public class Users {
 
     }
 
-    public Users(String first_name, String last_name, String email, String password, String username) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Users(String firstName, String lastName, String email, String password, String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
