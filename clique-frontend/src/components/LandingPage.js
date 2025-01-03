@@ -14,7 +14,7 @@ const LandingPage = () => {
 
     return(
         <>
-            <h2>Welcome</h2>
+            <h2>Welcome {user.username}</h2>
             {/* Placeholder for Feed Component */}
         </>
     )
