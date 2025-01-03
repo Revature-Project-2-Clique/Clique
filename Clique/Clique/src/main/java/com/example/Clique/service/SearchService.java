@@ -1,9 +1,14 @@
 package com.example.Clique.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.Clique.Entities.Users;
+import com.example.Clique.dto.PostSearchDTO;
+import com.example.Clique.dto.UserDTO;
+import com.example.Clique.dto.UserSearchDTO;
 import com.example.Clique.repository.PostRepository;
 import com.example.Clique.repository.ReactionRepository;
 import com.example.Clique.repository.UsersRepository;
@@ -25,13 +30,22 @@ public class SearchService {
         this.reactionRepository = reactionRepository;
     }
 
-    public List searchUsers(Long userId, String query) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchUsers'");
+    public List<UserSearchDTO> searchUsers(String query) {
+        return userRepository.searchByUsername(query).stream()
+                .map(user -> new UserSearchDTO(user.getUserId(), user.getUsername()))
+                .collect(Collectors.toList());
     }
 
-    public List searchPosts(Long userId, String query) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
+    public List<PostSearchDTO> searchPosts(String query) {
+        return postRepository.searchByContent(query).stream()
+                .map(post -> {
+                    Long userId = post.getPosterId();
+                    String username = userRepository.getUsernameByUserId(userId);
+                    System.out.println(
+                            "Post ID: " + post.getPostId() + ", Likes: " + reactionRepository.countByPostId(post.getPostId()));
+                    return new PostSearchDTO(post.getPostId(), post.getPostText(), post.getPostedTime(), username,
+                            reactionRepository.countByPostId(post.getPostId()));
+                })
+                .collect(Collectors.toList());
     }
 }

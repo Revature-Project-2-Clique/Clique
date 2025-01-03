@@ -36,7 +36,7 @@ public class ReactionService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (reactionRepository.findByUserIdAndPostId(userId, postId).isPresent()) {
+        if (reactionRepository.findByReactorIdAndPostId(userId, postId).isPresent()) {
             return "You already liked this post!";
         }
 
@@ -56,7 +56,7 @@ public class ReactionService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Reactions reaction = reactionRepository.findByUserIdAndPostId(userId, postId)
+        Reactions reaction = reactionRepository.findByReactorIdAndPostId(userId, postId)
                 .orElseThrow(() -> new RuntimeException("You have not liked this post!"));
 
         reactionRepository.delete(reaction);
