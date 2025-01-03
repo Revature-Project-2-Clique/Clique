@@ -54,8 +54,8 @@ public class ConnectionService {
         for (Connections connections : allFollowing) {
             UserDTO newDTO = new UserDTO();
             Users newUser = userRepository.findByUserId(connections.getFollowingId());
-            newDTO.setFirstName(newUser.getFirst_name());
-            newDTO.setLastName(newUser.getLast_name());
+            newDTO.setFirstName(newUser.getFirstName());
+            newDTO.setLastName(newUser.getLastName());
             newDTO.setUserId(newUser.getUserId());
             newDTO.setUsername(newUser.getUsername());
             allFollowingDTO.add(newDTO);
