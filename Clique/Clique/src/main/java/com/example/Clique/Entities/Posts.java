@@ -14,13 +14,13 @@ public class Posts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    private Long postId;
 
-    private Long poster_id;
+    private Long posterId;
 
-    private String post_text;
+    private String postText;
 
-    private String comment_text;
+    private String commentText;
 
-    private LocalDateTime posted_time;
+    private LocalDateTime postedTime;
 }
