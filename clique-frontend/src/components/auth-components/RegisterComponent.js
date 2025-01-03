@@ -3,8 +3,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const RegisterComponent = () => {
-    const [first_name, setFirstName] = useState('');
-    const [last_name, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,8 +12,8 @@ const RegisterComponent = () => {
         console.log("Form submitted!");
         e.preventDefault();
         const userData={
-            first_name: first_name,
-            last_name: last_name,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             username: username,
             password: password
@@ -33,9 +33,9 @@ const RegisterComponent = () => {
         <>
         <form onSubmit={registerHandler}>
             <label>First Name:</label>
-                <input type="text" id="first" value={first_name} onChange={(e)=>setFirstName(e.target.value)}/><br/>
+                <input type="text" id="first" value={firstName} onChange={(e)=>setFirstName(e.target.value)}/><br/>
             <label>Last Name:</label>
-                <input type="text" id="last" value={last_name} onChange={(e)=>setLastName(e.target.value)}/><br/>
+                <input type="text" id="last" value={lastName} onChange={(e)=>setLastName(e.target.value)}/><br/>
             <label>Email:</label>
                 <input type="text" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}/><br/>
             <label>Username:</label>

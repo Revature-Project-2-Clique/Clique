@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy Frontend on S3') {
             steps {
                 dir('clique-frontend') {
-                    sh 'aws s3 sync build/ s3://clique-app-bucket'
+                    sh 'aws s3 sync build/ s3://cliques-app-bucket'
                 }
             }
         }

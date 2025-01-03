@@ -18,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ReactionController {
 
     private final ReactionService reactionService;
+    private final UserService userService;
 
-    public ReactionController(ReactionService reactionService) {
+    public ReactionController(ReactionService reactionService, UserService userService) {
         this.reactionService = reactionService;
+        this.userService = userService;
     }
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUserId();
+        return userService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping("/like")

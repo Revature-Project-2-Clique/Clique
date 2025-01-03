@@ -36,7 +36,8 @@ public class Users {
 
     }
 
-    public Users(String firstName, String lastName, String email, String password, String username) {
+
+    public Users (String firstName, String lastName, String email, String password, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
