@@ -28,7 +28,7 @@ public class CommentController {
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return UserService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping("/add")

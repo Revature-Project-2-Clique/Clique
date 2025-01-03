@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/reactions")
 public class ReactionController {
-    
+
     private final ReactionService reactionService;
 
     public ReactionController(ReactionService reactionService) {
@@ -25,7 +24,7 @@ public class ReactionController {
 
     private Long getUserId(Authentication auth) {
         String username = auth.getName();
-        return UserService.getUserByUsername(username).getUser_id();
+        return UserService.getUserByUsername(username).getUserId();
     }
 
     @PostMapping("/like")
@@ -46,6 +45,4 @@ public class ReactionController {
         return ResponseEntity.ok(reactionService.getLikesCount(userId, postId));
     }
 
-
-    
 }
