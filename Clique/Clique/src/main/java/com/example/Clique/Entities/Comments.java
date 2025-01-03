@@ -18,13 +18,17 @@ public class Comments {
     @Id
     @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    private Long commentId;
 
-    private Long post_id;
+    @Column(name = "post_id")
+    private Long postId;
 
-    private Long poster_id;
+    @Column(name = "poster_id")
+    private Long posterId;
 
-    private String comment_text;
+    @Column(name = "comment_text")
+    private String commentText;
 
-    private LocalDateTime posted_Time;
+    @Column(name = "posted_time")
+    private LocalDateTime postedTime;
 }

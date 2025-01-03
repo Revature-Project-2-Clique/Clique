@@ -1,6 +1,7 @@
 package com.example.Clique.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Clique.Entities.Comments;
+import com.example.Clique.dto.CommentDTO;
 import com.example.Clique.service.CommentService;
 import com.example.Clique.service.UserService;
 
@@ -44,7 +46,7 @@ public class CommentController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<Comments>> getComments(Authentication auth, @RequestBody Long postId) {
+    public ResponseEntity<Set<CommentDTO>> getComments(Authentication auth, @RequestBody Long postId) {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(commentService.getComments(userId, postId));
     }
