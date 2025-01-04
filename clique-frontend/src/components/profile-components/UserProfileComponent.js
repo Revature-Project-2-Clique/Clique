@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 
 const UserProfileComponent = () => {
 
-    const { user } = useUser();
+    const { user, token } = useUser();
     const { id } = useParams();
 
     // flag to determine if the requested user profile is the logged in user
@@ -23,10 +23,12 @@ const UserProfileComponent = () => {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
 
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
 
     const getUserInformation = async () => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/user/${id}`);
+            const response = await axios.get(`http://3.82.150.19:8080/user/${id}`, { headers });
             setResponseUser(response.data);
             if (response.data.userId === user.userId) {
                 setIsCurrentUser(true);
@@ -40,7 +42,7 @@ const UserProfileComponent = () => {
 
     const getPosts = async () => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/posts/poster/${id}`);
+            const response = await axios.get(`http://3.82.150.19:8080/posts/poster/${id}`, { headers });
             setPosts(response.data);
         } catch (error) {
             console.error("Error getting posts: ", error);
@@ -49,7 +51,7 @@ const UserProfileComponent = () => {
 
     const getFollowers = async() => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/followers`);
+            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/followers`, { headers });
             setFollowers(response.data);
         } catch (error) {
             console.error("Error getting followers: ", error);
@@ -58,7 +60,7 @@ const UserProfileComponent = () => {
 
     const getFollowing = async() => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/following`);
+            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/following`, { headers });
             setFollowing(response.data);
         } catch (error) {
             console.error("Error getting followers: ", error);

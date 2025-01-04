@@ -20,7 +20,11 @@ const LoginComponent = () => {
 
         try {
             const response = await axios.post("http://3.82.150.19:8080/auth/login", userData);
-            updateUser(response.data);
+
+            const authorizationHeader = response.headers["authorization"];
+            const token = authorizationHeader.split(" ")[1];
+
+            updateUser(response.data, token);
             navigate("/");
         } catch(error) {
             console.error("Error logging in:", error);
