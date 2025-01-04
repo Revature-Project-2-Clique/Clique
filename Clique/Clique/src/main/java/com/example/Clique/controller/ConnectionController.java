@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Clique.Entities.Connections;
-import com.example.Clique.dto.UserDTO;
 import com.example.Clique.service.ConnectionService;
 import com.example.Clique.service.UserService;
 
@@ -51,10 +50,10 @@ public class ConnectionController {
         return ResponseEntity.ok(connectionService.getFollowers(id));
     }
 
-    @GetMapping("/ifFollows")
-    public ResponseEntity<Boolean> checkIfFollowing(Authentication auth, @RequestBody Long userId2) {
-        Long userId = getUserId(auth);
-        return ResponseEntity.ok(connectionService.checkIfFollowing(userId, userId2));
+    @GetMapping("/{followerId}/isFollowing/{followingId}")
+    public ResponseEntity<Boolean> isUserFollowing(@PathVariable Long followerId, @PathVariable Long followingId) {
+        boolean isFollowing = connectionService.isUserFollowing(followerId, followingId);
+        return ResponseEntity.ok(isFollowing);
     }
 
 }

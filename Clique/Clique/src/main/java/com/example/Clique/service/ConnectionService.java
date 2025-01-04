@@ -2,6 +2,7 @@ package com.example.Clique.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.example.Clique.dto.UsersDTO;
 import org.springframework.stereotype.Service;
@@ -67,16 +68,8 @@ public class ConnectionService {
         return allFollowersDTO;
     }
 
-    public Boolean checkIfFollowing(Long userId, Long userId2) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        if (allFollowing != null) {
-            for (Connections connection : allFollowing) {
-                if (connection.getFollowerId() == userId2) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public Boolean isUserFollowing(Long followerId, Long followingId) {
+        return connectionRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
 
     public List<Connections> getAllFollowing(Long userId) {
