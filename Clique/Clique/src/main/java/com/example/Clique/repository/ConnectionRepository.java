@@ -11,6 +11,7 @@ import com.example.Clique.Entities.Connections;
 public interface ConnectionRepository extends JpaRepository<Connections, Long> {
 
     List<Connections> findAllByFollowingId(Long followingId);
+    List<Connections> findAllByFollowerId(Long followerId);
 
     Connections findByConnectionId(Long connectionId);
 }
