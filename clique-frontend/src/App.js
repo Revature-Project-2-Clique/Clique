@@ -1,9 +1,9 @@
 import './App.css';
-import RegisterComponent from './components/auth-components/RegisterComponent';
 import Navbar from './Navbar';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { UserProvider } from './components/UserContext';
 import LandingPage from './components/LandingPage';
+import UserProfileComponent from './components/profile-components/UserProfileComponent';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
           </div>
           <Routes>
             <Route path ="/" element={<LandingPage />}/>
-            <Route path='/register' element={<RegisterComponent/>}/>
+            <Route path="/user/:id" element={<UserProfileComponent />} />
           </Routes>
         </Router>
     </UserProvider>

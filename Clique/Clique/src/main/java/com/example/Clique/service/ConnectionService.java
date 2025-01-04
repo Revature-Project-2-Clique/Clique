@@ -2,7 +2,9 @@ package com.example.Clique.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import com.example.Clique.dto.UsersDTO;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
@@ -48,35 +50,39 @@ public class ConnectionService {
         return 0;
     }
 
-    public List<UserDTO> getFollowing(Long userId) {
+    public List<UsersDTO> getFollowing(Long userId) {
         List<Connections> allFollowing = getAllFollowing(userId);
-        List<UserDTO> allFollowingDTO = new ArrayList<>();
+        List<UsersDTO> allFollowingDTO = new ArrayList<>();
         for (Connections connections : allFollowing) {
-            UserDTO newDTO = new UserDTO();
-            Users newUser = userRepository.findByUserId(connections.getFollowingId());
-            newDTO.setFirstName(newUser.getFirstName());
-            newDTO.setLastName(newUser.getLastName());
-            newDTO.setUserId(newUser.getUserId());
-            newDTO.setUsername(newUser.getUsername());
-            allFollowingDTO.add(newDTO);
+            allFollowingDTO.add(mapToUsersDTO(connections.getFollowingId()));
         }
         return allFollowingDTO;
     }
 
-    public Boolean checkIfFollowing(Long userId, Long userId2) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        if (allFollowing != null) {
-            for (Connections connection : allFollowing) {
-                if (connection.getFollowerId() == userId2) {
-                    return true;
-                }
-            }
+    public List<UsersDTO> getFollowers(Long userId) {
+        List<Connections> allFollowers = connectionRepository.findAllByFollowerId(userId);
+        List<UsersDTO> allFollowersDTO = new ArrayList<>();
+        for (Connections connections : allFollowers) {
+            allFollowersDTO.add(mapToUsersDTO(connections.getFollowerId()));
         }
-        return false;
+        return allFollowersDTO;
+    }
+
+    public Boolean isUserFollowing(Long followerId, Long followingId) {
+        return connectionRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
 
     public List<Connections> getAllFollowing(Long userId) {
         return connectionRepository.findAllByFollowingId(userId);
     }
 
+    public UsersDTO mapToUsersDTO(Long userId) {
+        UsersDTO usersDTO = new UsersDTO();
+        Users user = userRepository.findByUserId(userId);
+        usersDTO.setFirstName(user.getFirstName());
+        usersDTO.setLastName(user.getLastName());
+        usersDTO.setUserId(userId);
+        usersDTO.setUsername(user.getUsername());
+        return usersDTO;
+    }
 }

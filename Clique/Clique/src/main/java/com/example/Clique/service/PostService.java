@@ -48,4 +48,8 @@ public class PostService {
         //throw new UnsupportedOperationException("Unimplemented method 'getPostsByUsername'");
         return (List<Posts>) postRepository.findAllByPosterId(userId);
     }
+
+    public List<Posts> getPostsByPosterId(Long posterId) {
+        return (List<Posts>) postRepository.findAllByPosterId(posterId);
+    }
 }
