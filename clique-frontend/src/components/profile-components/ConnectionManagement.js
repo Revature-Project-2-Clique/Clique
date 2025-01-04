@@ -31,7 +31,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
         // if users are not connected, follow button is shown and clicking it will follow the user
         if(connection === false){
             try {
-                await axios.post("http://3.82.150.19:8080/connection/follow", displayUser.userId, { headers });
+                await axios.post("http://3.82.150.19:8080/connection/follow", { whoToFollow: displayUser.userId }, { headers });
                 setConnection(true);
                 getFollowers();
                 getFollowing();
@@ -40,7 +40,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
             }
         } else {
             try {
-                await axios.post("http://3.82.150.19:8080/connection/unfollow", displayUser.userId, { headers });
+                await axios.post("http://3.82.150.19:8080/connection/unfollow", { whoToUnfollow:displayUser.userId }, { headers });
                 setConnection(false)
                 getFollowers();
                 getFollowing();
