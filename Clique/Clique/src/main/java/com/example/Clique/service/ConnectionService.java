@@ -2,14 +2,13 @@ package com.example.Clique.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import com.example.Clique.dto.UsersDTO;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
 import com.example.Clique.Entities.Users;
-import com.example.Clique.dto.UserDTO;
 import com.example.Clique.repository.ConnectionRepository;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
@@ -29,40 +28,42 @@ public class ConnectionService {
     }
 
     public Connections followUser(Long userId, Long whoToFollow) {
-        Connections connections = new Connections(userId, whoToFollow);
-        return connectionRepository.save(connections);
+        Optional<Users> usersOptional = userRepository.findById(whoToFollow);
+        if (usersOptional.isPresent()) {
+            Connections connections = new Connections(userId, whoToFollow);
+            return connectionRepository.save(connections);
+        }
+       return null;
     }
 
-    public Integer unfollowUser(Long userId, Long whoToUnfollow) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        Long connectionId = null;
-        for (Connections connections : allFollowing) {
-            if (connections.getFollowingId() == whoToUnfollow) {
-                connectionId = connections.getFollowingId();
-            }
-        }
-
-        if (connectionId != null) {
-            Connections target = connectionRepository.findByConnectionId(connectionId);
+    public Integer unfollowUser(Long followerId, Long whoToUnfollow) {
+        // if the connection exists, delete it
+        if (connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToUnfollow)){
+            Connections target = connectionRepository.findByFollowerIdAndFollowingId(followerId, whoToUnfollow);
             connectionRepository.delete(target);
             return 1;
         }
+
         return 0;
     }
 
     public List<UsersDTO> getFollowing(Long userId) {
-        List<Connections> allFollowing = getAllFollowing(userId);
+        // connections where this user is the follower
+        List<Connections> allFollowing = connectionRepository.findAllByFollowerId(userId);
         List<UsersDTO> allFollowingDTO = new ArrayList<>();
         for (Connections connections : allFollowing) {
+            // map the followingId to a usersDTO
             allFollowingDTO.add(mapToUsersDTO(connections.getFollowingId()));
         }
         return allFollowingDTO;
     }
 
     public List<UsersDTO> getFollowers(Long userId) {
-        List<Connections> allFollowers = connectionRepository.findAllByFollowerId(userId);
+        // connections where this user is the following
+        List<Connections> allFollowers = connectionRepository.findAllByFollowingId(userId);
         List<UsersDTO> allFollowersDTO = new ArrayList<>();
         for (Connections connections : allFollowers) {
+            // map the followerId to a usersDTO
             allFollowersDTO.add(mapToUsersDTO(connections.getFollowerId()));
         }
         return allFollowersDTO;
