@@ -3,13 +3,10 @@ package com.example.Clique.controller;
 import java.net.Authenticator;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
@@ -50,6 +47,16 @@ public class PostController {
     private ResponseEntity<List<Posts>> getPostsByUsername(Authentication auth, @RequestBody Users username) {
         Long userId = getUserId(auth);
         return ResponseEntity.status(200).body(postService.getPostsByUsername(userId, username));
+    }
+
+    @GetMapping("/poster/{id}")
+    private ResponseEntity<List<Posts>> getPostsByPosterId(@PathVariable Long id) {
+        try {
+            List<Posts> posts = postService.getPostsByPosterId(id);
+            return ResponseEntity.status(200).body(posts);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
 }
