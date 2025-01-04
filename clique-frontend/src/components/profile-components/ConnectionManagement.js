@@ -6,13 +6,15 @@ axios.defaults.withCredentials = true;
 
 const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
 
-    const { user } = useUser();
+    const { user, token } = useUser();
     const [connection, setConnection] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
     const getConnectionStatus = async () => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/connection/${user.userId}/isFollowing/${displayUser.userId}`);
+            const response = await axios.get(`http://3.82.150.19:8080/connection/${user.userId}/isFollowing/${displayUser.userId}`, { headers });
             setConnection(response.data);
         } catch (error) {
             console.error("Error getting connection status: ", error)
@@ -29,7 +31,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
         // if users are not connected, follow button is shown and clicking it will follow the user
         if(connection === false){
             try {
-                await axios.post("http://3.82.150.19:8080/connection/follow", displayUser.userId);
+                await axios.post("http://3.82.150.19:8080/connection/follow", displayUser.userId, { headers });
                 setConnection(true);
                 getFollowers();
                 getFollowing();
@@ -38,7 +40,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
             }
         } else {
             try {
-                await axios.delete("http://3.82.150.19:8080/connection/unfollow", displayUser.userId);
+                await axios.post("http://3.82.150.19:8080/connection/unfollow", displayUser.userId, { headers });
                 setConnection(false)
                 getFollowers();
                 getFollowing();

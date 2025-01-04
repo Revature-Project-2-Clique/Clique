@@ -7,7 +7,7 @@ import ChangePassword from "./ChangePassword";
 axios.defaults.withCredentials = true;
 
 const ProfileManagement = () => {
-    const { user } = useUser();
+    const { user, token } = useUser();
     const { updateUser } = useUser();
 
     const [firstName, setFirstName] = useState(user.firstName);
@@ -15,6 +15,8 @@ const ProfileManagement = () => {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [showChangeName, setShowChangeName] = useState(true);
+
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const passwordSubmitHandler = async (e) => {
         e.preventDefault();
@@ -26,7 +28,7 @@ const ProfileManagement = () => {
         };
 
         try {
-            await axios.patch("http://3.82.150.19:8080/user/change-password", request);
+            await axios.patch("http://3.82.150.19:8080/user/change-password", request, { headers });
             
         } catch (error) {
             console.error("Error updating password: ", error);
@@ -43,7 +45,7 @@ const ProfileManagement = () => {
         }
 
         try{
-            const response = await axios.patch("http://3.82.150.19:8080/user/update-name", request);
+            const response = await axios.patch("http://3.82.150.19:8080/user/update-name", request, { headers });
             updateUser(response.data);
         } catch (error) {
             console.error("Error updating name: ", error);
