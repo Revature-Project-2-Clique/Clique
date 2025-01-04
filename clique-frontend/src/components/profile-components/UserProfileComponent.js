@@ -70,7 +70,7 @@ const UserProfileComponent = () => {
         getPosts();
         getFollowers();
         getFollowing();
-    }, [id, user, posts]);
+    }, [id, user, posts, followers, following]);
 
 
     if (!responseUser) {
