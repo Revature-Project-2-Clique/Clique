@@ -25,7 +25,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
 
     useEffect(()=>{
         getConnectionStatus();
-    },[connection]);
+    },[]);
 
     const submitHandler = async () => {
         // if users are not connected, follow button is shown and clicking it will follow the user
