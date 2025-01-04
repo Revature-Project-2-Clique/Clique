@@ -31,7 +31,11 @@ public class ConnectionController {
     @PostMapping("/follow")
     public ResponseEntity<Connections> followUser(Authentication auth, @RequestBody Long whoToFollow) {
         Long userId = getUserId(auth);
-        return ResponseEntity.ok(connectionService.followUser(userId, whoToFollow));
+        try {
+            return ResponseEntity.ok(connectionService.followUser(userId, whoToFollow));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PostMapping("/unfollow")
