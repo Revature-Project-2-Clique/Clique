@@ -34,7 +34,7 @@ public class AuthController {
     @PostMapping("/login")
     private ResponseEntity<UsersDTO> login(@RequestBody Users user) {
         String token = userService.loginUser(user);
-        UsersDTO usersDTO = userService.mapToDTO(user);
+        UsersDTO usersDTO = userService.makeLoginDTO(user);
         return ResponseEntity.status(200).header("Authorization", "Bearer "+token).body(usersDTO);
     }
 

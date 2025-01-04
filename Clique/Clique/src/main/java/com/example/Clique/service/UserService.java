@@ -108,4 +108,8 @@ public class UserService {
         return dto;
     }
 
+    public UsersDTO makeLoginDTO(Users user) {
+        Users loggedIn = getUserByUsername(user.getUsername());
+        return mapToDTO(loggedIn);
+    }
 }
