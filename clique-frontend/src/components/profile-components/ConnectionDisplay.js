@@ -26,7 +26,7 @@ const ConnectionDisplay = ({followers, following}) => {
             <Modal isOpen={visible}>
                 <div>
                     <button onClick={close}>Close</button>
-                    <ConnectionList connections={listType == "followers" ? followers : following} title={listType == "followers" ? "Followers:" : "Following:"} />
+                    <ConnectionList connections={listType === "followers" ? followers : following} title={listType === "followers" ? "Followers:" : "Following:"} />
                 </div>   
             </Modal>
         </>
