@@ -27,10 +27,18 @@ public class ConnectionService {
         this.userRepository = userRepository;
     }
 
-    public Connections followUser(Long userId, Long whoToFollow) {
+    public Connections followUser(Long followerId, Long whoToFollow) {
         Optional<Users> usersOptional = userRepository.findById(whoToFollow);
+
+        if (followerId.equals(whoToFollow)) {
+            throw new RuntimeException("Cannot follow self");
+        }
+
         if (usersOptional.isPresent()) {
-            Connections connections = new Connections(userId, whoToFollow);
+            if (connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToFollow)){
+                throw new RuntimeException("Connection already exists");
+            }
+            Connections connections = new Connections(followerId, whoToFollow);
             return connectionRepository.save(connections);
         }
        return null;
