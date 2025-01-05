@@ -46,7 +46,11 @@ const ProfileManagement = () => {
 
         try{
             const response = await axios.patch("http://3.82.150.19:8080/user/update-name", request, { headers });
-            updateUser(response.data);
+
+            const authorizationHeader = response.headers["authorization"];
+            const token = authorizationHeader.split(" ")[1];
+            
+            updateUser(response.data, token);
         } catch (error) {
             console.error("Error updating name: ", error);
         }
