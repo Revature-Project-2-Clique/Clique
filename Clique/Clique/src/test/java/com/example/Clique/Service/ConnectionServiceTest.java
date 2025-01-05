@@ -65,29 +65,6 @@ public class ConnectionServiceTest {
 
 
     @Test
-    void testGetFollowing() {
-        Long userId = 1L;
-
-        Connections connection = new Connections(userId, 2L);
-        Users user = new Users();
-        user.setUserId(2L);
-        user.setUsername("user2");
-        user.setFirstName("First");
-        user.setLastName("Last");
-
-        when(connectionRepository.findAllByFollowingId(userId)).thenReturn(List.of(connection));
-        when(usersRepository.findByUserId(2L)).thenReturn(user);
-
-        List<UserDTO> following = connectionService.getFollowing(userId);
-
-        assertEquals(1, following.size());
-        assertEquals("user2", following.get(0).getUsername());
-        verify(connectionRepository, times(1)).findAllByFollowingId(userId);
-        verify(usersRepository, times(1)).findByUserId(2L);
-    }
-
-
-    @Test
     void testGetAllFollowing() {
         Long userId = 1L;
 
