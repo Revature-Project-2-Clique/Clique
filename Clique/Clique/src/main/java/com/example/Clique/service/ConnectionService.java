@@ -2,12 +2,13 @@ package com.example.Clique.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.example.Clique.dto.UsersDTO;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
 import com.example.Clique.Entities.Users;
-import com.example.Clique.dto.UserDTO;
 import com.example.Clique.repository.ConnectionRepository;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
@@ -26,57 +27,71 @@ public class ConnectionService {
         this.userRepository = userRepository;
     }
 
-    public Connections followUser(Long userId, Long whoToFollow) {
-        Connections connections = new Connections(userId, whoToFollow);
-        return connectionRepository.save(connections);
-    }
+    public Connections followUser(Long followerId, Long whoToFollow) {
+        Optional<Users> usersOptional = userRepository.findById(whoToFollow);
 
-    public Integer unfollowUser(Long userId, Long whoToUnfollow) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        Long connectionId = null;
-        for (Connections connections : allFollowing) {
-            if (connections.getFollowingId() == whoToUnfollow) {
-                connectionId = connections.getFollowingId();
-            }
+        if (followerId.equals(whoToFollow)) {
+            throw new RuntimeException("Cannot follow self");
         }
 
-        if (connectionId != null) {
-            Connections target = connectionRepository.findByConnectionId(connectionId);
+        if (usersOptional.isPresent()) {
+            if (connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToFollow)){
+                throw new RuntimeException("Connection already exists");
+            }
+            Connections connections = new Connections(followerId, whoToFollow);
+            return connectionRepository.save(connections);
+        }
+       return null;
+    }
+
+    public Integer unfollowUser(Long followerId, Long whoToUnfollow) {
+        // if the connection exists, delete it
+        if (connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToUnfollow)){
+            Connections target = connectionRepository.findByFollowerIdAndFollowingId(followerId, whoToUnfollow);
             connectionRepository.delete(target);
             return 1;
         }
+
         return 0;
     }
 
-    public List<UserDTO> getFollowing(Long userId) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        List<UserDTO> allFollowingDTO = new ArrayList<>();
+    public List<UsersDTO> getFollowing(Long userId) {
+        // connections where this user is the follower
+        List<Connections> allFollowing = connectionRepository.findAllByFollowerId(userId);
+        List<UsersDTO> allFollowingDTO = new ArrayList<>();
         for (Connections connections : allFollowing) {
-            UserDTO newDTO = new UserDTO();
-            Users newUser = userRepository.findByUserId(connections.getFollowingId());
-            newDTO.setFirstName(newUser.getFirstName());
-            newDTO.setLastName(newUser.getLastName());
-            newDTO.setUserId(newUser.getUserId());
-            newDTO.setUsername(newUser.getUsername());
-            allFollowingDTO.add(newDTO);
+            // map the followingId to a usersDTO
+            allFollowingDTO.add(mapToUsersDTO(connections.getFollowingId()));
         }
         return allFollowingDTO;
     }
 
-    public Boolean checkIfFollowing(Long userId, Long userId2) {
-        List<Connections> allFollowing = getAllFollowing(userId);
-        if (allFollowing != null) {
-            for (Connections connection : allFollowing) {
-                if (connection.getFollowerId().equals(userId2)) {
-                    return true;
-                }
-            }
+    public List<UsersDTO> getFollowers(Long userId) {
+        // connections where this user is the following
+        List<Connections> allFollowers = connectionRepository.findAllByFollowingId(userId);
+        List<UsersDTO> allFollowersDTO = new ArrayList<>();
+        for (Connections connections : allFollowers) {
+            // map the followerId to a usersDTO
+            allFollowersDTO.add(mapToUsersDTO(connections.getFollowerId()));
         }
-        return false;
+        return allFollowersDTO;
+    }
+
+    public Boolean isUserFollowing(Long followerId, Long followingId) {
+        return connectionRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
 
     public List<Connections> getAllFollowing(Long userId) {
         return connectionRepository.findAllByFollowingId(userId);
     }
 
+    public UsersDTO mapToUsersDTO(Long userId) {
+        UsersDTO usersDTO = new UsersDTO();
+        Users user = userRepository.findByUserId(userId);
+        usersDTO.setFirstName(user.getFirstName());
+        usersDTO.setLastName(user.getLastName());
+        usersDTO.setUserId(userId);
+        usersDTO.setUsername(user.getUsername());
+        return usersDTO;
+    }
 }

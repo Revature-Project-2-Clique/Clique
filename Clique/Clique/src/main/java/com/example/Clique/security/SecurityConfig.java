@@ -55,7 +55,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // Todo: Change the setAllowedOrigins to react frontend ip
         configuration.setAllowedOrigins(List.of("http://clique-app-bucket.s3-website.us-east-2.amazonaws.com/", "http://cliques-app-bucket.s3-website-us-east-1.amazonaws.com/")); 
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); 
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-Control"));
         configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(List.of("Authorization"));

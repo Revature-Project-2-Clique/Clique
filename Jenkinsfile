@@ -18,7 +18,7 @@ pipeline {
                 dir('clique-frontend') {
                     sh '''
                         yarn install
-                        yarn build
+                        CI=false yarn build
                     '''
                 }
             }
