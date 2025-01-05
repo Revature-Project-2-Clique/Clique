@@ -70,7 +70,7 @@ const ProfileManagement = () => {
             <ChangePassword password={password} 
                             newPassword = {newPassword} 
                             passwordSubmitHandler={passwordSubmitHandler} 
-                            setCurrPassword={setPassword} 
+                            setPassword={setPassword} 
                             setNewPassword={setNewPassword} />
         }
         <br/>
