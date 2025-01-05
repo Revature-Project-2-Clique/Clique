@@ -67,7 +67,7 @@ public class ConnectionService {
         List<Connections> allFollowing = getAllFollowing(userId);
         if (allFollowing != null) {
             for (Connections connection : allFollowing) {
-                if (connection.getFollowerId() == userId2) {
+                if (connection.getFollowerId().equals(userId2)) {
                     return true;
                 }
             }
