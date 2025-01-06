@@ -86,8 +86,9 @@ public class UserService {
         Optional<Users> userOptional = usersRepository.findByUsername(updatePasswordDTO.getUsername());
         if (userOptional.isPresent()) {
             Users existingUser = userOptional.get();
-            if (existingUser.getPassword().equals(updatePasswordDTO.getPassword())) {
-                existingUser.setPassword(updatePasswordDTO.getNewPassword());
+            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+            if (bcrypt.matches(updatePasswordDTO.getPassword(), existingUser.getPassword())) {
+                existingUser.setPassword(new BCryptPasswordEncoder().encode(updatePasswordDTO.getNewPassword()));
                 Users updated = usersRepository.save(existingUser);
                 return;
             } else {
