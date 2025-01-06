@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,11 +48,16 @@ public class ConnectionServiceTest {
 
     @Test
     void testFollowUser() {
-        Long userId = 1L;
-        Long whoToFollow = 2L;
+        Long userId = 99L;
+        Long whoToFollow = 98L;
 
+        Users user = new Users(); // Assuming a default constructor for the Users class.
         Connections connection = new Connections(userId, whoToFollow);
 
+        // Mock the user repository to return a user for the given ID.
+        when(usersRepository.findById(whoToFollow)).thenReturn(Optional.of(user));
+
+        when(connectionRepository.existsByFollowerIdAndFollowingId(userId, whoToFollow)).thenReturn(false);
         when(connectionRepository.save(any(Connections.class))).thenReturn(connection);
 
         Connections result = connectionService.followUser(userId, whoToFollow);
@@ -59,6 +65,8 @@ public class ConnectionServiceTest {
         assertNotNull(result);
         assertEquals(userId, result.getFollowerId());
         assertEquals(whoToFollow, result.getFollowingId());
+        verify(usersRepository, times(1)).findById(whoToFollow);
+        verify(connectionRepository, times(1)).existsByFollowerIdAndFollowingId(userId, whoToFollow);
         verify(connectionRepository, times(1)).save(any(Connections.class));
     }
 
