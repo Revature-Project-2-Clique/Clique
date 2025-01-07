@@ -4,6 +4,7 @@ import { useUser } from "../UserContext";
 import { useParams } from "react-router-dom";
 import ActiveUserComponent from "./ActiveUserComponent";
 import ViewUserComponent from "./ViewUserComponent";
+import api from "../../service/api";
 
 axios.defaults.withCredentials = true;
 
@@ -28,7 +29,7 @@ const UserProfileComponent = () => {
 
     const getUserInformation = async () => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/user/${id}`, { headers });
+            const response = await api.get(`/user/${id}`, { headers });
             setResponseUser(response.data);
             if (response.data.userId === user.userId) {
                 setIsCurrentUser(true);
@@ -42,7 +43,7 @@ const UserProfileComponent = () => {
 
     const getPosts = async () => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/posts/poster/${id}`, { headers });
+            const response = await api.get(`/posts/poster/${id}`, { headers });
             setPosts(response.data);
         } catch (error) {
             console.error("Error getting posts: ", error);
@@ -51,7 +52,7 @@ const UserProfileComponent = () => {
 
     const getFollowers = async() => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/followers`, { headers });
+            const response = await api.get(`/connection/${id}/followers`, { headers });
             setFollowers(response.data);
         } catch (error) {
             console.error("Error getting followers: ", error);
@@ -60,7 +61,7 @@ const UserProfileComponent = () => {
 
     const getFollowing = async() => {
         try {
-            const response = await axios.get(`http://3.82.150.19:8080/connection/${id}/following`, { headers });
+            const response = await api.get(`/connection/${id}/following`, { headers });
             setFollowing(response.data);
         } catch (error) {
             console.error("Error getting followers: ", error);
