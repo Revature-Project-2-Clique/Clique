@@ -1,8 +1,9 @@
-import axios from "axios";
 import { useState } from "react";
 import { useUser } from "../UserContext";
 import ChangeName from "./ChangeName";
 import ChangePassword from "./ChangePassword";
+import api from "../../service/api";
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
@@ -28,7 +29,7 @@ const ProfileManagement = () => {
         };
 
         try {
-            await axios.patch("http://3.82.150.19:8080/user/change-password", request, { headers });
+            await api.patch("/user/change-password", request, { headers });
             
         } catch (error) {
             console.error("Error updating password: ", error);
@@ -45,7 +46,7 @@ const ProfileManagement = () => {
         }
 
         try{
-            const response = await axios.patch("http://3.82.150.19:8080/user/update-name", request, { headers });
+            const response = await api.patch("/user/update-name", request, { headers });
 
             const authorizationHeader = response.headers["authorization"];
             const token = authorizationHeader.split(" ")[1];

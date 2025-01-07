@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import api from "../../service/api";
+
 axios.defaults.withCredentials = true;
 
 const RegisterComponent = () => {
@@ -19,7 +21,7 @@ const RegisterComponent = () => {
             password: password
         }
         console.log("Sending axios request...");
-        axios.post("http://3.82.150.19:8080/auth/register", userData)
+        api.post("/auth/register", userData)
         .then((res)=>{
             console.log(res.data);
             alert("Registration successful!");

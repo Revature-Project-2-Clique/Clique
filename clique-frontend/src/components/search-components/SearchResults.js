@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import api, { searchUsers, searchPosts } from "../../service/api";
-import api2, {searchPosts2, searchUsers2} from "../../service/api2";
+import { searchUsers, searchPosts } from "../../service/api";
 import axios from "axios";
 import { useUser } from "../UserContext";
 
@@ -23,10 +22,8 @@ const SearchResults = () => {
             try {
                 setLoading(true);
                 const [users, posts] = await Promise.all([
-                    //searchUsers(query, headers),
-                    //searchPosts(query, headers),
-                    searchUsers2(query, headers),
-                    searchPosts2(query, headers),
+                    searchUsers(query, headers),
+                    searchPosts(query, headers),
                 ]);
                 setUserResults(users);
                 setPostResults(posts);

@@ -20,8 +20,7 @@ const LoginComponent = () => {
         };
 
         try {
-            const response = await axios.post("http://3.82.150.19:8080/auth/login", userData);
-            //const response = await api.post("/auth/login", userData);
+            const response = await api.post("/auth/login", userData);
 
             const authorizationHeader = response.headers["authorization"];
             const token = authorizationHeader.split(" ")[1];
