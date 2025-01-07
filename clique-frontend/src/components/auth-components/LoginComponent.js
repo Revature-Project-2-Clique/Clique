@@ -2,6 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from '../UserContext'
+import api from "../../service/api";
 
 const LoginComponent = () => {
 
@@ -20,6 +21,7 @@ const LoginComponent = () => {
 
         try {
             const response = await axios.post("http://3.82.150.19:8080/auth/login", userData);
+            //const response = await api.post("/auth/login", userData);
 
             const authorizationHeader = response.headers["authorization"];
             const token = authorizationHeader.split(" ")[1];

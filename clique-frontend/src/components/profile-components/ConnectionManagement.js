@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../UserContext";
+import api from "../../service/api";
+
 
 axios.defaults.withCredentials = true;
 
@@ -15,6 +17,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing}) => {
     const getConnectionStatus = async () => {
         try {
             const response = await axios.get(`http://3.82.150.19:8080/connection/${user.userId}/isFollowing/${displayUser.userId}`, { headers });
+            //const response = await api.get(`/connection/${user.userId}/isFollowing/${displayUser.userId}`, { headers });
             setConnection(response.data);
         } catch (error) {
             console.error("Error getting connection status: ", error)

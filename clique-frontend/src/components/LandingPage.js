@@ -1,5 +1,6 @@
 import AuthParentComponent from "./auth-components/AuthParentComponent";
 import { useUser } from './UserContext';
+import SearchBar from "./search-components/SearchBar";
 
 
 const LandingPage = () => {
@@ -16,8 +17,9 @@ const LandingPage = () => {
         <>
             <h2>Welcome {user.username}</h2>
             {/* Placeholder for Feed Component */}
+            <SearchBar />
         </>
     )
 }
 
-export default LandingPage
+export default LandingPage;
