@@ -10,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,11 +108,22 @@ public class UserService {
         dto.setLastName(user.getLastName());
         dto.setUsername(user.getUsername());
         dto.setUserId(user.getUserId());
+        dto.setPrivate(user.getIsPrivate());
         return dto;
     }
 
     public UsersDTO makeLoginDTO(Users user) {
         Users loggedIn = getUserByUsername(user.getUsername());
         return mapToDTO(loggedIn);
+    }
+
+    public String changeVisibility(Long userId){
+        Optional<Users> usersOptional = usersRepository.findById(userId);
+        if(usersOptional.isPresent()){
+            Users user = usersOptional.get();
+            user.setIsPrivate(!user.getIsPrivate());
+            return "Visibility updated";
+        }
+        throw new RuntimeException("User not found");
     }
 }
