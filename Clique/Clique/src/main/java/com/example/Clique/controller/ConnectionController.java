@@ -2,6 +2,7 @@ package com.example.Clique.controller;
 
 import java.util.List;
 
+import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.dto.UsersDTO;
 import org.apache.coyote.Request;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class ConnectionController {
         return ResponseEntity.ok(isFollowing);
     }
 
-    @PostMapping("/followRequest")
+    @PostMapping("/follow-request")
     public ResponseEntity<String> requestToFollow(Authentication auth, @RequestBody Long targetUserId) {
         Long userId = getUserId(auth);
         try {
@@ -73,7 +74,7 @@ public class ConnectionController {
 
     }
 
-    @PostMapping("/approveRequest")
+    @PostMapping("/approve-request")
     public ResponseEntity<String> respondToRequest(Authentication auth, @RequestBody Long requestUserId) {
         Long userId = getUserId(auth);
         try {
@@ -83,6 +84,19 @@ public class ConnectionController {
             return ResponseEntity.badRequest().body(null);
         }
 
+    }
+
+    @GetMapping("/get-requests")
+    public ResponseEntity<List<FollowRequest>> getRequests(Authentication auth) {
+        Long userId = getUserId(auth);
+        return ResponseEntity.ok(connectionService.getFollowRequests(userId));
+    }
+
+    @DeleteMapping("/delete-request")
+    public ResponseEntity<String> deleteRequest(Authentication auth, @RequestBody Long requestUserId) {
+        Long userId = getUserId(auth);
+        connectionService.deleteFollowRequest(userId, requestUserId);
+        return ResponseEntity.ok("Request deleted");
     }
 
 }

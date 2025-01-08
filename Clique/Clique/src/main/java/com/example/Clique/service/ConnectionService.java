@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.dto.UsersDTO;
+import com.example.Clique.repository.FollowRequestRepository;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
@@ -18,15 +20,17 @@ import javax.management.Notification;
 @Service
 public class ConnectionService {
 
+    private final FollowRequestRepository followRequestRepository;
     private ConnectionRepository connectionRepository;
     private UsersRepository userRepository;
     private JwtUtil jwtUtil;
 
     public ConnectionService(JwtUtil jwtUtil, ConnectionRepository connectionRepository,
-            UsersRepository userRepository) {
+                             UsersRepository userRepository, FollowRequestRepository followRequestRepository) {
         this.jwtUtil = jwtUtil;
         this.connectionRepository = connectionRepository;
         this.userRepository = userRepository;
+        this.followRequestRepository = followRequestRepository;
     }
 
     public Connections followUser(Long followerId, Long whoToFollow) {
@@ -102,12 +106,12 @@ public class ConnectionService {
         Optional<Users> targetUsersOptional = userRepository.findById(targetUserId);
 
         if (usersOptional.isPresent() && targetUsersOptional.isPresent()) {
-            Users user = usersOptional.get();
-            Notification notification = notificationService.sendNotification(
-                    targetUserId,
-                    "User " + user.getUsername() + " wants to follow you."
-            );
+            FollowRequest followRequest = new FollowRequest();
+            followRequest.setRequesterId(userId);
+            followRequest.setTargetUserId(targetUserId);
+            followRequestRepository.save(followRequest);
         }
+
         else throw new RuntimeException("User not found");
 
     }
@@ -117,18 +121,22 @@ public class ConnectionService {
         Optional<Users> requestUsersOptional = userRepository.findById(requesterUserId);
 
         if (usersOptional.isPresent() && requestUsersOptional.isPresent()) {
-            Users user = usersOptional.get();
-
+            // Create the connection
             Connections connection = new Connections(requesterUserId, userId);
             connectionRepository.save(connection);
 
-            Notification notification = notificationService.sendNotification(
-                    requesterUserId,
-                    "User " + user.getUsername() + " approved your follow request."
-                    );
-
+            // Delete the request
+            followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
         }
 
+    }
+
+    public List<FollowRequest> getFollowRequests(Long userId) {
+        return followRequestRepository.findByTargetUserId(userId);
+    }
+
+    public void deleteFollowRequest(Long userId, Long requesterUserId) {
+        followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
     }
 
 }
