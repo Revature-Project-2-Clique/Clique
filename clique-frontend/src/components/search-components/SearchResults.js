@@ -65,7 +65,7 @@ const SearchResults = () => {
                 ) : (
                     postResults.map((post) => (
                         <div
-                            key={post.id}
+                            key={post.postId}
                             className="post-result"
                             style={{
                                 border: "1px solid #ccc",
