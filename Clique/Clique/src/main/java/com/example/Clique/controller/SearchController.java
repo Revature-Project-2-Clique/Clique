@@ -35,7 +35,7 @@ public class SearchController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         try {
-            System.out.println("------------------------------------------------");
+            //System.out.println("------------------------------------------------");
             List<UserSearchDTO> users = searchService.searchUsers();
             return ResponseEntity.ok(users);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class SearchController {
     @GetMapping("/posts")
     public ResponseEntity<?> searchPosts(@RequestParam String query) {
         try {
-            System.out.printf("------------------------------------------------ ", query);
+            //System.out.printf("------------------------------------------------ ", query);
             if (query == null || query.trim().isEmpty()) {
                 throw new IllegalArgumentException("Query parameter cannot be empty.");
             }
