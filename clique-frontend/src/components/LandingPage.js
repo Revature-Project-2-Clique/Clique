@@ -21,7 +21,6 @@ const LandingPage = () => {
             <CreatePost />
             <Feed />
             {/* Placeholder for Feed Component */}
-            <SearchBar />
         </>
     )
 }

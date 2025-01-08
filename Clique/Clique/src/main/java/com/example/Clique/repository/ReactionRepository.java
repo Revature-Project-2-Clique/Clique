@@ -14,4 +14,6 @@ public interface ReactionRepository extends JpaRepository<Reactions, Long> {
 
     Long countByPostId(Long postId);
 
+    
+
 }
