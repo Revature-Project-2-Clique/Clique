@@ -3,6 +3,8 @@ import { useUser } from "../UserContext";
 import debounce from 'lodash.debounce';
 import api, { searchAllUsers, searchPosts } from '../../service/api';
 import axios from 'axios';
+import PostList from '../post-components/PostList';
+import { Link } from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 
@@ -99,7 +101,9 @@ function SearchBar() {
                 ) : (
                     filteredUsers.map((user) => (
                         <div key={user.userId} className="user-result">
-                            <h3>{user.username}</h3>
+                            <Link to={`/user/${user.userId}`}>
+                                <h3>{user.username}</h3>
+                            </Link>
                         </div>
                     ))
                 )}
@@ -107,20 +111,13 @@ function SearchBar() {
 
             <div className="search-post-section">
                 <h2>Posts</h2>
-                {loadingPosts ? (
-                    <p>Loading posts...</p>
-                ) : posts.length === 0 ? (
-                    <p>No posts found.</p>
+                {
+                posts ? (
+                    <PostList posts={posts}/>
                 ) : (
-                    posts.map((post) => (
-                        <div key={post.postId} className="post-result">
-                            <h3>{post.username}</h3>
-                            <p>{post.postText}</p>
-                            <p>Created at: {post.postedTime}</p>
-                            <p>Likes: {post.likes}</p>
-                        </div>
-                    ))
-                )}
+                    <p>Loading posts</p>
+                )
+            }
             </div>
 
         </div>
