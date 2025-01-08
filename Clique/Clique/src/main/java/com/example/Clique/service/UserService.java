@@ -38,6 +38,7 @@ public class UserService {
     
     public String registerUser(Users user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setIsPrivate(false);
         usersRepository.save(user);
         return jwtUtil.generateToken(user.getUsername());
     }

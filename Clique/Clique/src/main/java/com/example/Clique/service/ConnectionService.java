@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.dto.UsersDTO;
 import com.example.Clique.repository.FollowRequestRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
