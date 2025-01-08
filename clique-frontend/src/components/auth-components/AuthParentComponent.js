@@ -18,7 +18,6 @@ const AuthParentComponent = () => {
             h-[800px] overflow-hidden
           "
         >
-          {/* LEFT SIDE: Form container */}
           <div className="flex flex-col justify-center h-full px-4 py-4">
             <h2 className="text-gray-800 text-3xl font-extrabold">
               Welcome to Clique
@@ -33,8 +32,6 @@ const AuthParentComponent = () => {
               {showLogin ? "New user? Register" : "Existing user? Sign in"}
             </button>
           </div>
-
-          {/* RIGHT SIDE: Conditionally rendered image */}
           <div className="relative w-full h-full rounded-xl overflow-hidden p-0">
             <img
                 src={image}
