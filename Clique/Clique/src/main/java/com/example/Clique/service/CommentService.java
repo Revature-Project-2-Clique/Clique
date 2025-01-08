@@ -40,7 +40,7 @@ public class CommentService {
         return "comment added";
     }
 
-    public Set<CommentDTO> getComments(Long userId, Long postId) {
+    public Set<CommentDTO> getComments(Long postId) {
         List<Comments> commentList = commentRepository.findByPostId(postId);
         Set<CommentDTO> rv = new HashSet<>();
         for (Comments c: commentList) {

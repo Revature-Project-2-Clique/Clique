@@ -95,7 +95,7 @@ public class CommentServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
         when(userRepository.findById(2L)).thenReturn(Optional.of(user2));
 
-        Set<CommentDTO> comments = commentService.getComments(1L, postId);
+        Set<CommentDTO> comments = commentService.getComments(postId);
 
         assertEquals(2, comments.size());
         verify(commentRepository, times(1)).findByPostId(postId);

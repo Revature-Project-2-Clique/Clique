@@ -1,6 +1,5 @@
 package com.example.Clique.controller;
 
-import java.net.Authenticator;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
+import com.example.Clique.dto.PostDTO;
 import com.example.Clique.service.PostService;
 import com.example.Clique.service.UserService;
 
@@ -38,9 +38,9 @@ public class PostController {
     }
 
     @GetMapping("/feed")
-    private ResponseEntity<List<Posts>> getPosts(Authentication auth) {
+    private ResponseEntity<List<PostDTO>> getUserFeed(Authentication auth) {
         Long userId = getUserId(auth);
-        return ResponseEntity.status(200).body(postService.getAllPosts(userId));
+        return ResponseEntity.status(200).body(postService.getUserFeed(userId));
     }
 
     @GetMapping("/username")
