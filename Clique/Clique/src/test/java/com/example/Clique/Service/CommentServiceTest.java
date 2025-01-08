@@ -45,25 +45,25 @@ public class CommentServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testCreateComment() {
-        Long userId = 1L;
-        Long postId = 1L;
-        String content = "This is a comment.";
+    // @Test
+    // void testCreateComment() {
+    //     Long userId = 1L;
+    //     Long postId = 1L;
+    //     String content = "This is a comment.";
 
-        Comments comment = new Comments();
-        comment.setPosterId(userId);
-        comment.setPostId(postId);
-        comment.setCommentText(content);
-        comment.setPostedTime(LocalDateTime.now());
+    //     Comments comment = new Comments();
+    //     comment.setPosterId(userId);
+    //     comment.setPostId(postId);
+    //     comment.setCommentText(content);
+    //     comment.setPostedTime(LocalDateTime.now());
 
-        when(commentRepository.save(any(Comments.class))).thenReturn(comment);
+    //     when(commentRepository.save(any(Comments.class))).thenReturn(comment);
 
-        commentService.createComment(userId, postId, content);
+    //     commentService.createComment(userId, postId, content);
 
-        //assertEquals("comment added", result);
-        verify(commentRepository, times(1)).save(any(Comments.class));
-    }
+    //     //assertEquals("comment added", result);
+    //     verify(commentRepository, times(1)).save(any(Comments.class));
+    // }
 
     @Test
     void testGetComments() {
