@@ -47,4 +47,8 @@ public class Users {
         this.username = username;
         this.isPrivate = isPrivate;
     }
+
+    public void setIsPrivate(boolean b) {
+        this.isPrivate = b;
+    }
 }
