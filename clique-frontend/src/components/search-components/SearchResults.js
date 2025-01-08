@@ -49,9 +49,9 @@ const SearchResults = () => {
                     <p>No users found.</p>
                 ) : (
                     userResults.map((user) => (
-                        <div key={user.id} className="user-result">
+                        <div key={user.userId} className="user-result">
                             <h3>{user.username}</h3>
-                            <Link to={`/user/${user.id}`}>
+                            <Link to={`/user/${user.userId}`}>
                                 <button>View Profile</button>
                             </Link>
                         </div>

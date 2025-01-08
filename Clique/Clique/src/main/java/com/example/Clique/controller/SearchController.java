@@ -33,17 +33,11 @@ public class SearchController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> searchUsers(Authentication auth, @RequestParam String query) {
+    public ResponseEntity<?> getAllUsers() {
         try {
-            if (query == null || query.trim().isEmpty()) {
-                throw new IllegalArgumentException("Query parameter cannot be empty.");
-            }
-            Long userId = getUserId(auth);
-            List<UserSearchDTO> users = searchService.searchUsers(query);
+            System.out.println("------------------------------------------------");
+            List<UserSearchDTO> users = searchService.searchUsers();
             return ResponseEntity.ok(users);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred while searching for users.");
@@ -51,20 +45,20 @@ public class SearchController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<?> searchPosts(Authentication auth, @RequestParam String query) {
+    public ResponseEntity<?> searchPosts(@RequestParam String query) {
         try {
+            System.out.printf("------------------------------------------------ ", query);
             if (query == null || query.trim().isEmpty()) {
                 throw new IllegalArgumentException("Query parameter cannot be empty.");
             }
-            Long userId = getUserId(auth);
-            List<PostSearchDTO> users = searchService.searchPosts(query);
-            return ResponseEntity.ok(users);
+            List<PostSearchDTO> posts = searchService.searchPosts(query);
+            return ResponseEntity.ok(posts);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unexpected error occurred while searching for posts.");
+                    .body("An unexpected error occurred while searching for posts. Mine again.");
         }
     }
 

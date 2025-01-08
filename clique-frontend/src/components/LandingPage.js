@@ -17,7 +17,6 @@ const LandingPage = () => {
         <>
             <h2>Welcome {user.username}</h2>
             {/* Placeholder for Feed Component */}
-            <SearchBar />
         </>
     )
 }

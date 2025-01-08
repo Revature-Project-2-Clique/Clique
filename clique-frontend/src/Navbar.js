@@ -18,7 +18,9 @@ const Navbar = () => {
                 <div className="links">
                     <Link to="/">Home</Link>
                     <Link to={`/user/${user.userId}`}>Profile</Link>
+                    <Link to="/search">Search</Link>
                     <Link to="/" onClick={handleLogout}>Logout</Link>
+                    
                 </div>
             </> 
             : null}

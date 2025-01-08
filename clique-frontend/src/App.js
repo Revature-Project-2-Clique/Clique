@@ -5,6 +5,7 @@ import { UserProvider } from './components/UserContext';
 import LandingPage from './components/LandingPage';
 import UserProfileComponent from './components/profile-components/UserProfileComponent';
 import SearchResults from './components/search-components/SearchResults';
+import SearchBar from './components/search-components/SearchBar';
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
           <Routes>
             <Route path ="/" element={<LandingPage />}/>
             <Route path="/user/:id" element={<UserProfileComponent />} />
-            <Route path="/search" element={<SearchResults />} />
+            <Route path="/search" element={<SearchBar />} />
+            <Route path="/searchResults" element={<SearchResults />} />
+            
           </Routes>
         </Router>
     </UserProvider>
