@@ -13,6 +13,8 @@ import com.example.Clique.repository.ConnectionRepository;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
 
+import javax.management.Notification;
+
 @Service
 public class ConnectionService {
 
@@ -94,4 +96,39 @@ public class ConnectionService {
         usersDTO.setUsername(user.getUsername());
         return usersDTO;
     }
+
+    public void sendFollowRequest(Long userId, Long targetUserId) {
+        Optional<Users> usersOptional = userRepository.findById(userId);
+        Optional<Users> targetUsersOptional = userRepository.findById(targetUserId);
+
+        if (usersOptional.isPresent() && targetUsersOptional.isPresent()) {
+            Users user = usersOptional.get();
+            Notification notification = notificationService.sendNotification(
+                    targetUserId,
+                    "User " + user.getUsername() + " wants to follow you."
+            );
+        }
+        else throw new RuntimeException("User not found");
+
+    }
+
+    public void approveFollowRequest(Long userId, Long requesterUserId) {
+        Optional<Users> usersOptional = userRepository.findById(userId);
+        Optional<Users> requestUsersOptional = userRepository.findById(requesterUserId);
+
+        if (usersOptional.isPresent() && requestUsersOptional.isPresent()) {
+            Users user = usersOptional.get();
+
+            Connections connection = new Connections(requesterUserId, userId);
+            connectionRepository.save(connection);
+
+            Notification notification = notificationService.sendNotification(
+                    requesterUserId,
+                    "User " + user.getUsername() + " approved your follow request."
+                    );
+
+        }
+
+    }
+
 }
