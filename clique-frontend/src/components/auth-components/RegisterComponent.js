@@ -36,6 +36,7 @@ const RegisterComponent = () => {
         <input
           type="text"
           id="first"
+          placeholder="First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           className="w-full text-gray-800 text-sm border-b border-gray-300
@@ -47,6 +48,7 @@ const RegisterComponent = () => {
         <input
           type="text"
           id="last"
+          placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           className="w-full text-gray-800 text-sm border-b border-gray-300
@@ -58,6 +60,7 @@ const RegisterComponent = () => {
         <input
           type="text"
           id="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full text-gray-800 text-sm border-b border-gray-300
@@ -69,6 +72,7 @@ const RegisterComponent = () => {
         <input
           type="text"
           id="name"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="w-full text-gray-800 text-sm border-b border-gray-300
@@ -80,6 +84,7 @@ const RegisterComponent = () => {
         <input
           type="password"
           id="password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full text-gray-800 text-sm border-b border-gray-300
