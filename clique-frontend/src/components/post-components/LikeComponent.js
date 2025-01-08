@@ -1,9 +1,9 @@
 import React from 'react'
 
-const LikeComponent = ({count, hasLiked}) => {
+const LikeComponent = ({count, hasLiked, onLikeToggle}) => {
   return (
     <p>
-        <button>
+        <button onClick={onLikeToggle}>
           {hasLiked ? 'Unlike' : 'Like'} ({count})
         </button>
     </p>

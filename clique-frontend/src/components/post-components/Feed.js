@@ -26,7 +26,7 @@ const Feed = () => {
         <>
             {
                 posts ? (
-                    <PostList posts={posts}/>
+                    <PostList posts={posts} setPosts={setPosts}/>
                 ) : (
                     <p>Loading posts</p>
                 )
