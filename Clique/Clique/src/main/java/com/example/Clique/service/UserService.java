@@ -122,6 +122,7 @@ public class UserService {
         if(usersOptional.isPresent()){
             Users user = usersOptional.get();
             user.setIsPrivate(!user.getIsPrivate());
+            usersRepository.save(user);
             return "Visibility updated";
         }
         throw new RuntimeException("User not found");
