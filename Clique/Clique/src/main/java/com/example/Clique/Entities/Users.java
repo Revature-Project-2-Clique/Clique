@@ -49,4 +49,8 @@ public class Users {
     public void setIsPrivate(boolean b) {
         this.isPrivate = b;
     }
+
+    public boolean getIsPrivate() {
+        return isPrivate;
+    }
 }

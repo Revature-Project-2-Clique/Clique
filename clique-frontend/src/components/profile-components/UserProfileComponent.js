@@ -87,6 +87,7 @@ const UserProfileComponent = () => {
                 posts={posts}
                 followers={followers}
                 following={following}
+                setPosts={setPosts}
             />
         );
     } else {
@@ -98,6 +99,7 @@ const UserProfileComponent = () => {
                 following={following}
                 getFollowers={getFollowers}
                 getFollowing={getFollowing}
+                setPosts={setPosts}
             />
         );
     }

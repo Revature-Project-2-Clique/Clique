@@ -50,9 +50,9 @@ public class PostController {
     }
 
     @GetMapping("/poster/{id}")
-    private ResponseEntity<List<Posts>> getPostsByPosterId(@PathVariable Long id) {
+    private ResponseEntity<List<PostDTO>> getPostsByPosterId(@PathVariable Long id) {
         try {
-            List<Posts> posts = postService.getPostsByPosterId(id);
+            List<PostDTO> posts = postService.getPostsByPosterId(id);
             return ResponseEntity.status(200).body(posts);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
