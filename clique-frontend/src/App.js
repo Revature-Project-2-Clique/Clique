@@ -7,6 +7,9 @@ import UserProfileComponent from './components/profile-components/UserProfileCom
 import SearchBar from './components/search-components/SearchBar';
 import Feed from './components/post-components/Feed';
 import FollowRequestComponent from './components/follow-request-components/FollowRequestComponent';
+import Modal from 'react-modal';
+
+Modal.setAppElement("#root");
 
 function App() {
   return (
