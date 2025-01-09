@@ -41,6 +41,14 @@ const Navbar = () => {
             >
               Explore
             </Link>
+            {user.private && (
+              <Link
+                to="/requests"
+                className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+              >
+                Follow Requests
+              </Link>
+            )}
             <Link 
               to="/" 
               onClick={handleLogout}
