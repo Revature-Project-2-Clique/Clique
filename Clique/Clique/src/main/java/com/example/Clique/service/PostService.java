@@ -77,6 +77,15 @@ public class PostService {
         return rv;
     }
 
+    public List<PostDTO> getExploreFeed(Long userId) {
+        List<PostDTO> rv = new ArrayList<>();
+        List<Posts> posts = postRepository.findAll();
+        for (Posts p: posts) {
+            rv.add(mapToPostDTO(p, userId));
+        }
+        return rv;
+    }
+
     public PostDTO mapToPostDTO(Posts post, Long userId) {
         Users u = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
         Users poster = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("Poster does not exist"));

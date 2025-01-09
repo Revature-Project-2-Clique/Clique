@@ -36,6 +36,12 @@ const Navbar = () => {
               Search
             </Link>
             <Link 
+                to="/explore"
+                className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+            >
+              Explore
+            </Link>
+            <Link 
               to="/" 
               onClick={handleLogout}
               className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
