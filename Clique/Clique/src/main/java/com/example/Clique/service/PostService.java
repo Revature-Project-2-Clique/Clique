@@ -67,13 +67,26 @@ public class PostService {
         List<Long> posterIds = connectionRepository.findFollowingIdsByFollowerId(userId).orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
         List<Posts> posts = postRepository.findByPosterIdInOrderByPostIdDesc(posterIds).orElseThrow(() -> new RuntimeException("Error getting posts"));
         for (Posts p: posts) {
-            Users u = usersRepository.findById(p.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
-            Optional<Reactions> reactions = reactionRepository.findByReactorIdAndPostId(userId, p.getPostId());
-            Boolean hasLiked = reactions.isPresent() ? true : false;
-            Set<CommentDTO> cdto = commentService.getComments(p.getPostId());
-            PostDTO pdto = new PostDTO(p.getPostId(), u.getUsername(), p.getPostText(), p.getPostedTime(), hasLiked, reactionRepository.countByPostId(p.getPostId()), cdto);
-            rv.add(pdto);
+            rv.add(mapToDTO(userId, p));
         }
         return rv;
+    }
+
+    public List<PostDTO> getExploreFeed(Long userId) {
+        List<PostDTO> rv = new ArrayList<>();
+        List<Posts> posts = postRepository.findAll();
+        for (Posts p: posts) {
+            rv.add(mapToDTO(userId, p));
+        }
+        return rv;
+    }
+
+    private PostDTO mapToDTO(Long userId, Posts p) {
+        Users u = usersRepository.findById(p.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
+        Optional<Reactions> reactions = reactionRepository.findByReactorIdAndPostId(userId, p.getPostId());
+        Boolean hasLiked = reactions.isPresent() ? true : false;
+        Set<CommentDTO> cdto = commentService.getComments(p.getPostId());
+        PostDTO pdto = new PostDTO(p.getPostId(), u.getUsername(), p.getPostText(), p.getPostedTime(), hasLiked, reactionRepository.countByPostId(p.getPostId()), cdto);
+        return pdto;
     }
 }

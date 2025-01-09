@@ -43,6 +43,12 @@ public class PostController {
         return ResponseEntity.status(200).body(postService.getUserFeed(userId));
     }
 
+    @GetMapping("/explore")
+    private ResponseEntity<List<PostDTO>> getExploreFeed(Authentication auth) {
+        Long userId = getUserId(auth);
+        return ResponseEntity.status(200).body(postService.getExploreFeed(userId));
+    }
+
     @GetMapping("/username")
     private ResponseEntity<List<Posts>> getPostsByUsername(Authentication auth, @RequestBody Users username) {
         Long userId = getUserId(auth);
