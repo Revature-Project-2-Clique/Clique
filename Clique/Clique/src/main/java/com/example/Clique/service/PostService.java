@@ -37,7 +37,7 @@ public class PostService {
         this.reactionRepository = reactionRepository;
     }
 
-    public Posts createPost(Long userId, Posts post) {
+    public PostDTO createPost(Long userId, Posts post) {
         if (post.getPostText().isEmpty() || post.getPostText().length() > 255) {
             return null;
         }
@@ -46,8 +46,8 @@ public class PostService {
         }
         post.setPosterId(userId);
         post.setPostedTime(LocalDateTime.now());
-        postRepository.save(post);
-        return post;
+        Posts rv = postRepository.save(post);
+        return mapToPostDTO(rv, userId);
     }
 
     public List<Posts> getAllPosts(Long userId) {
@@ -70,6 +70,7 @@ public class PostService {
     public List<PostDTO> getUserFeed(Long userId) {
         List<PostDTO> rv = new ArrayList<>();
         List<Long> posterIds = connectionRepository.findFollowingIdsByFollowerId(userId).orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
+        posterIds.add(userId);
         List<Posts> posts = postRepository.findByPosterIdInOrderByPostIdDesc(posterIds).orElseThrow(() -> new RuntimeException("Error getting posts"));
         for (Posts p: posts) {
             rv.add(mapToPostDTO(p, userId));
