@@ -58,8 +58,13 @@ public class PostService {
         return (List<Posts>) postRepository.findAllByPosterId(userId);
     }
 
-    public List<Posts> getPostsByPosterId(Long posterId) {
-        return (List<Posts>) postRepository.findAllByPosterId(posterId);
+    public List<PostDTO> getPostsByPosterId(Long posterId) {
+        List<PostDTO> dtos = new ArrayList<>();
+        List<Posts> posts = postRepository.findAllByPosterId(posterId);
+        for (Posts post : posts) {
+            dtos.add(mapToPostDTO(post, posterId));
+        }
+        return dtos;
     }
 
     public List<PostDTO> getUserFeed(Long userId) {
@@ -67,13 +72,27 @@ public class PostService {
         List<Long> posterIds = connectionRepository.findFollowingIdsByFollowerId(userId).orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
         List<Posts> posts = postRepository.findByPosterIdInOrderByPostIdDesc(posterIds).orElseThrow(() -> new RuntimeException("Error getting posts"));
         for (Posts p: posts) {
-            Users u = usersRepository.findById(p.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
-            Optional<Reactions> reactions = reactionRepository.findByReactorIdAndPostId(userId, p.getPostId());
-            Boolean hasLiked = reactions.isPresent() ? true : false;
-            Set<CommentDTO> cdto = commentService.getComments(p.getPostId());
-            PostDTO pdto = new PostDTO(p.getPostId(), u.getUsername(), p.getPostText(), p.getPostedTime(), hasLiked, reactionRepository.countByPostId(p.getPostId()), cdto);
-            rv.add(pdto);
+            rv.add(mapToPostDTO(p, userId));
         }
         return rv;
+    }
+
+    public PostDTO mapToPostDTO(Posts post, Long userId) {
+        Users u = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
+        Users poster = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("Poster does not exist"));
+        // if the logged in user whose id was passed to this method has reacted to this post or not
+        Optional<Reactions> reactions = reactionRepository.findByReactorIdAndPostId(userId, post.getPostId());
+        Boolean hasLiked = reactions.isPresent();
+        Set<CommentDTO> cdto = commentService.getComments(post.getPostId());
+        PostDTO pdto = new PostDTO();
+        pdto.setPostId(post.getPostId());
+        pdto.setUsername(poster.getUsername());
+        pdto.setPostText(post.getPostText());
+        pdto.setPostedTime(post.getPostedTime());
+        pdto.setLikes(reactionRepository.countByPostId(post.getPostId()));
+        pdto.setHasLiked(hasLiked);
+        pdto.setCdto(cdto);
+
+        return pdto;
     }
 }
