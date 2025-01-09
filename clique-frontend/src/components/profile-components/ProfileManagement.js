@@ -4,6 +4,7 @@ import ChangeName from "./ChangeName";
 import ChangePassword from "./ChangePassword";
 import api from "../../service/api";
 import axios from "axios";
+import ChangePrivacy from "./ChangePrivacy";
 
 axios.defaults.withCredentials = true;
 
@@ -11,11 +12,12 @@ const ProfileManagement = () => {
     const { user, token } = useUser();
     const { updateUser } = useUser();
 
+    const [currentForm, setCurrentForm] = useState("name");     // state profile management forms, name/password/privacy
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
-    const [showChangeName, setShowChangeName] = useState(true);
+    const [isPrivate, setIsPrivate] = useState(user.private);
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -57,6 +59,15 @@ const ProfileManagement = () => {
         }
     }
 
+    const privacySubmitHandler = async (e) => {
+        try {
+            await api.patch("/user/change-visibility", {}, { headers })
+            setIsPrivate(!isPrivate);
+        } catch (error) {
+            console.error("Error changing profile privacy: ", error);
+        }
+    }
+
 
 
     return(
@@ -64,22 +75,43 @@ const ProfileManagement = () => {
         <br/><br/>
         <h2>Profile Management</h2>
         <br/>
-        {
-            showChangeName ? 
-            <ChangeName firstName={firstName} lastName={lastName} nameSubmitHandler={nameSubmitHandler} setFirstName = {setFirstName} setLastName={setLastName} /> 
-            :
-            <ChangePassword password={password} 
-                            newPassword = {newPassword} 
-                            passwordSubmitHandler={passwordSubmitHandler} 
-                            setPassword={setPassword} 
-                            setNewPassword={setNewPassword} />
-        }
+        <div>
+            <button onClick = {() => setCurrentForm("name")}>Update Name</button>
+            <button onClick = {() => setCurrentForm("password")}>Change Password</button>
+            <button onClick = {() => setCurrentForm("privacy")}>Change Privacy</button>
+        </div>
         <br/>
-        <button onClick = {() => setShowChangeName(!showChangeName)}>
-            {showChangeName ? "Change your password" : "Change your name"}
-        </button>
-        </>
+        {currentForm === "name" && (
+                <ChangeName
+                    firstName={firstName}
+                    lastName={lastName}
+                    nameSubmitHandler={nameSubmitHandler}
+                    setFirstName={setFirstName}
+                    setLastName={setLastName}
+                />
+        )}
+        
+        {currentForm === "password" && (
+            <ChangePassword 
+                password={password} 
+                newPassword = {newPassword} 
+                passwordSubmitHandler={passwordSubmitHandler} 
+                setPassword={setPassword} 
+                setNewPassword={setNewPassword} 
+            />
+        )}
+
+        {currentForm === "privacy" && (
+            <ChangePrivacy 
+                isPrivate={isPrivate} 
+                setIsPrivate = {setIsPrivate} 
+                privacySubmitHandler={privacySubmitHandler} 
+            />
+        )}
+
+    </>
     );
+
 
 }
 
