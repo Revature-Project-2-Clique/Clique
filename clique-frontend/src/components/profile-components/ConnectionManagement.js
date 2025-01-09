@@ -46,7 +46,7 @@ const ConnectionManagement = ({displayUser, getFollowers, getFollowing, connecti
 
     // function to determine button text to be rendered
     const getButton = () => {
-        if (displayUser.private) {
+        if (displayUser.private && !connection) {
             return submitted ? "Request Submitted" : "Request to Follow";
         } else {
             return connection ? "Unfollow" : "Follow";

@@ -48,12 +48,8 @@ const ProfileManagement = () => {
         }
 
         try{
-            const response = await api.patch("/user/update-name", request, { headers });
-
-            const authorizationHeader = response.headers["authorization"];
-            const token = authorizationHeader.split(" ")[1];
-            
-            updateUser(response.data, token);
+            const response = await api.patch("/user/update-name", request, { headers })
+            updateUser(response.data);
         } catch (error) {
             console.error("Error updating name: ", error);
         }
@@ -61,7 +57,7 @@ const ProfileManagement = () => {
 
     const privacySubmitHandler = async (e) => {
         try {
-            await api.patch("/user/change-visibility", {}, { headers })
+            await api.patch("/user/change-visibility", {},{ headers })
             setIsPrivate(!isPrivate);
         } catch (error) {
             console.error("Error changing profile privacy: ", error);
