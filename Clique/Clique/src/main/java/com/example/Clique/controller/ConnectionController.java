@@ -92,11 +92,15 @@ public class ConnectionController {
         return ResponseEntity.ok(connectionService.getFollowRequests(userId));
     }
 
-    @DeleteMapping("/delete-request")
+    @PostMapping("/delete-request")
     public ResponseEntity<String> deleteRequest(Authentication auth, @RequestBody Long requestUserId) {
         Long userId = getUserId(auth);
-        connectionService.deleteFollowRequest(userId, requestUserId);
-        return ResponseEntity.ok("Request deleted");
+        try {
+            connectionService.deleteFollowRequest(userId, requestUserId);
+            return ResponseEntity.ok("Request deleted");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 }
