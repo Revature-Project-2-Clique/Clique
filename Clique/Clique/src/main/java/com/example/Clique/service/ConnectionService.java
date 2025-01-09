@@ -130,7 +130,8 @@ public class ConnectionService {
             connectionRepository.save(connection);
 
             // Delete the request
-            followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
+            FollowRequest request = followRequestRepository.findByTargetUserIdAndRequesterId(userId, requesterUserId);
+            followRequestRepository.delete(request);
         }
 
     }
@@ -140,7 +141,8 @@ public class ConnectionService {
     }
 
     public void deleteFollowRequest(Long userId, Long requesterUserId) {
-        followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
+        FollowRequest request = followRequestRepository.findByTargetUserIdAndRequesterId(userId, requesterUserId);
+        followRequestRepository.delete(request);
     }
 
 }

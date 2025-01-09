@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FollowRequestRepository extends JpaRepository<FollowRequest, Long> {
     List<FollowRequest> findByTargetUserId(Long targetUserId);
-    void deleteByTargetUserIdAndRequesterId(Long targetUserId, Long requesterId);
+    FollowRequest findByTargetUserIdAndRequesterId(Long targetUserId, Long requesterId);
 }
