@@ -17,4 +17,8 @@ public class UserDTO {
 
     private Long userId;
 
+    private String bio;
+
+    
+
 }

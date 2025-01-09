@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../UserContext";
 import ChangeName from "./ChangeName";
 import ChangePassword from "./ChangePassword";
+import ChangeBio from "./ChangeBio";
 import api from "../../service/api";
 import axios from "axios";
 
@@ -16,6 +17,7 @@ const ProfileManagement = () => {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [showChangeName, setShowChangeName] = useState(true);
+    const [bio, setBios] = useState(user.bio)
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -57,6 +59,22 @@ const ProfileManagement = () => {
         }
     }
 
+    const bioSubmitHandler = async (e) => {
+        e.preventDefault();
+
+        const request = {
+            bio: bio
+        }
+
+        try {
+            const response = await api.put("/user/edit-bio", request, {headers});
+            updateUser(response.data.bio, token);
+
+        } catch (error) {
+            console.error("Error updating bio: ", error);
+        }
+    }
+
 
 
     return(
@@ -73,7 +91,10 @@ const ProfileManagement = () => {
                             passwordSubmitHandler={passwordSubmitHandler} 
                             setPassword={setPassword} 
                             setNewPassword={setNewPassword} />
+            
         }
+        <br/>
+        <ChangeBio bio={bio} setBios = {setBios} bioSubmitHandler={bioSubmitHandler}  />
         <br/>
         <button onClick = {() => setShowChangeName(!showChangeName)}>
             {showChangeName ? "Change your password" : "Change your name"}

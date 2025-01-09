@@ -5,12 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UsersDTO {
-    private Long userId;
-    private String username;
-    private String firstName;
-    private String lastName;
+@NoArgsConstructor
+public class BioDTO {
     private String bio;
 }

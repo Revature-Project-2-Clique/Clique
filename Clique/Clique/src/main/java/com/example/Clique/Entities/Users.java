@@ -32,16 +32,20 @@ public class Users {
     @Column(unique = true)
     private String username;
 
+    @Column(nullable = true)
+    private String bio;
+
     public Users() {
 
     }
 
 
-    public Users (String firstName, String lastName, String email, String password, String username) {
+    public Users (String firstName, String lastName, String email, String password, String username, String bio) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.bio = bio;
     }
 }
