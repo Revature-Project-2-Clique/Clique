@@ -110,6 +110,9 @@ public class ConnectionService {
             if (connectionRepository.existsByFollowerIdAndFollowingId(userId, targetUserId)){
                 throw new RuntimeException("Connection already exists");
             }
+            if (followRequestRepository.existsByRequesterIdAndTargetUserId(userId, targetUserId)){
+                throw new RuntimeException("Request already exists");
+            }
             FollowRequest followRequest = new FollowRequest();
             followRequest.setRequesterId(userId);
             followRequest.setTargetUserId(targetUserId);
