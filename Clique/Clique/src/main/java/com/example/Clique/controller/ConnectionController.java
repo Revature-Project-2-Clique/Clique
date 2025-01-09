@@ -2,7 +2,9 @@ package com.example.Clique.controller;
 
 import java.util.List;
 
+import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.dto.UsersDTO;
+import org.apache.coyote.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +60,43 @@ public class ConnectionController {
     public ResponseEntity<Boolean> isUserFollowing(@PathVariable Long followerId, @PathVariable Long followingId) {
         boolean isFollowing = connectionService.isUserFollowing(followerId, followingId);
         return ResponseEntity.ok(isFollowing);
+    }
+
+    @PostMapping("/follow-request")
+    public ResponseEntity<String> requestToFollow(Authentication auth, @RequestBody Long targetUserId) {
+        Long userId = getUserId(auth);
+        try {
+            connectionService.sendFollowRequest(userId, targetUserId);
+            return ResponseEntity.ok("Request sent");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    @PostMapping("/approve-request")
+    public ResponseEntity<String> respondToRequest(Authentication auth, @RequestBody Long requestUserId) {
+        Long userId = getUserId(auth);
+        try {
+            connectionService.approveFollowRequest(userId, requestUserId);
+            return ResponseEntity.ok("Request approved");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    @GetMapping("/get-requests")
+    public ResponseEntity<List<FollowRequest>> getRequests(Authentication auth) {
+        Long userId = getUserId(auth);
+        return ResponseEntity.ok(connectionService.getFollowRequests(userId));
+    }
+
+    @DeleteMapping("/delete-request")
+    public ResponseEntity<String> deleteRequest(Authentication auth, @RequestBody Long requestUserId) {
+        Long userId = getUserId(auth);
+        connectionService.deleteFollowRequest(userId, requestUserId);
+        return ResponseEntity.ok("Request deleted");
     }
 
 }

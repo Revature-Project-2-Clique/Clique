@@ -9,6 +9,7 @@ import com.example.Clique.service.ReactionService;
 import com.example.Clique.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,14 +31,14 @@ public class ReactionController {
         return userService.getUserByUsername(username).getUserId();
     }
 
-    @PostMapping("/like")
-    public ResponseEntity<String> likePost(Authentication auth, @RequestBody Long postId) {
+    @PostMapping("{postId}/like")
+    public ResponseEntity<String> likePost(Authentication auth, @PathVariable("postId") Long postId) {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(reactionService.likePost(userId, postId));
     }
 
-    @DeleteMapping("/unlike")
-    public ResponseEntity<String> unlikePost(Authentication auth, @RequestBody Long postId) {
+    @DeleteMapping("{postId}/unlike")
+    public ResponseEntity<String> unlikePost(Authentication auth, @PathVariable("postId") Long postId) {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(reactionService.unlikePost(userId, postId));
     }

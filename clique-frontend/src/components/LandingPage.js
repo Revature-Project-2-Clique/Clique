@@ -18,8 +18,7 @@ const LandingPage = () => {
     return(
         <>
             <h2>Welcome {user.username}</h2>
-            <CreatePost />
-            <Feed />
+            <Feed explore={false}/>
             {/* Placeholder for Feed Component */}
         </>
     )

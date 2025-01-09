@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class UserService {
     
     public String registerUser(Users user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setIsPrivate(false);
         usersRepository.save(user);
         return jwtUtil.generateToken(user.getUsername());
     }
@@ -108,6 +110,7 @@ public class UserService {
         dto.setUsername(user.getUsername());
         dto.setUserId(user.getUserId());
         dto.setBio(user.getBio());
+        dto.setPrivate(user.getIsPrivate());
         return dto;
     }
 
@@ -125,5 +128,15 @@ public class UserService {
 
         return new BioDTO(user.getBio());
         
+    }
+
+    public String changeVisibility(Long userId){
+        Optional<Users> usersOptional = usersRepository.findById(userId);
+        if(usersOptional.isPresent()){
+            Users user = usersOptional.get();
+            user.setIsPrivate(!user.getIsPrivate());
+            return "Visibility updated";
+        }
+        throw new RuntimeException("User not found");
     }
 }

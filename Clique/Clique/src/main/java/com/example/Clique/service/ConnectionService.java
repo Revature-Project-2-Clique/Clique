@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.dto.UsersDTO;
+import com.example.Clique.repository.FollowRequestRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.example.Clique.Entities.Connections;
@@ -13,18 +16,22 @@ import com.example.Clique.repository.ConnectionRepository;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
 
+import javax.management.Notification;
+
 @Service
 public class ConnectionService {
 
+    private final FollowRequestRepository followRequestRepository;
     private ConnectionRepository connectionRepository;
     private UsersRepository userRepository;
     private JwtUtil jwtUtil;
 
     public ConnectionService(JwtUtil jwtUtil, ConnectionRepository connectionRepository,
-            UsersRepository userRepository) {
+                             UsersRepository userRepository, FollowRequestRepository followRequestRepository) {
         this.jwtUtil = jwtUtil;
         this.connectionRepository = connectionRepository;
         this.userRepository = userRepository;
+        this.followRequestRepository = followRequestRepository;
     }
 
     public Connections followUser(Long followerId, Long whoToFollow) {
@@ -94,4 +101,43 @@ public class ConnectionService {
         usersDTO.setUsername(user.getUsername());
         return usersDTO;
     }
+
+    public void sendFollowRequest(Long userId, Long targetUserId) {
+        Optional<Users> usersOptional = userRepository.findById(userId);
+        Optional<Users> targetUsersOptional = userRepository.findById(targetUserId);
+
+        if (usersOptional.isPresent() && targetUsersOptional.isPresent()) {
+            FollowRequest followRequest = new FollowRequest();
+            followRequest.setRequesterId(userId);
+            followRequest.setTargetUserId(targetUserId);
+            followRequestRepository.save(followRequest);
+        }
+
+        else throw new RuntimeException("User not found");
+
+    }
+
+    public void approveFollowRequest(Long userId, Long requesterUserId) {
+        Optional<Users> usersOptional = userRepository.findById(userId);
+        Optional<Users> requestUsersOptional = userRepository.findById(requesterUserId);
+
+        if (usersOptional.isPresent() && requestUsersOptional.isPresent()) {
+            // Create the connection
+            Connections connection = new Connections(requesterUserId, userId);
+            connectionRepository.save(connection);
+
+            // Delete the request
+            followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
+        }
+
+    }
+
+    public List<FollowRequest> getFollowRequests(Long userId) {
+        return followRequestRepository.findByTargetUserId(userId);
+    }
+
+    public void deleteFollowRequest(Long userId, Long requesterUserId) {
+        followRequestRepository.deleteByTargetUserIdAndRequesterId(userId, requesterUserId);
+    }
+
 }

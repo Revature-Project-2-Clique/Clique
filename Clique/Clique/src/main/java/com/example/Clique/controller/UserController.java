@@ -65,5 +65,15 @@ public class UserController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    @PatchMapping("/change-visibility")
+    public ResponseEntity<String> changeVisibility(Authentication auth) {
+        Long userId = getUserId(auth);
+        try {
+            return ResponseEntity.ok().body(userService.changeVisibility(userId));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

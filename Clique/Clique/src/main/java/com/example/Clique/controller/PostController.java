@@ -31,9 +31,9 @@ public class PostController {
     }
 
     @PostMapping
-    private ResponseEntity<Posts> createPost(Authentication auth, @RequestBody Posts post) {
+    private ResponseEntity<PostDTO> createPost(Authentication auth, @RequestBody Posts post) {
         Long userId = getUserId(auth);
-        Posts createdPost = postService.createPost(userId, post);
+        PostDTO createdPost = postService.createPost(userId, post);
         return ResponseEntity.status(200).body(createdPost);
     }
 
@@ -43,6 +43,12 @@ public class PostController {
         return ResponseEntity.status(200).body(postService.getUserFeed(userId));
     }
 
+    @GetMapping("/explore")
+    private ResponseEntity<List<PostDTO>> getExploreFeed(Authentication auth) {
+        Long userId = getUserId(auth);
+        return ResponseEntity.status(200).body(postService.getExploreFeed(userId));
+    }
+
     @GetMapping("/username")
     private ResponseEntity<List<Posts>> getPostsByUsername(Authentication auth, @RequestBody Users username) {
         Long userId = getUserId(auth);
@@ -50,9 +56,9 @@ public class PostController {
     }
 
     @GetMapping("/poster/{id}")
-    private ResponseEntity<List<Posts>> getPostsByPosterId(@PathVariable Long id) {
+    private ResponseEntity<List<PostDTO>> getPostsByPosterId(@PathVariable Long id) {
         try {
-            List<Posts> posts = postService.getPostsByPosterId(id);
+            List<PostDTO> posts = postService.getPostsByPosterId(id);
             return ResponseEntity.status(200).body(posts);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

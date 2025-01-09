@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useUser } from '../UserContext';
 import api from '../../service/api';
 
-const CreatePost = () => {
+const CreatePost = ({addNewPost}) => {
 
     const {user, token} = useUser();
     const [postText, setPostText] = useState("");
@@ -11,8 +11,9 @@ const CreatePost = () => {
 
     const createPost = async (postData) => {
         try {
-            console.log(postData)
-            await api.post(`/posts`, postData, {headers})
+            //console.log(postData)
+            const response = await api.post(`/posts`, postData, {headers})
+            return response.data;
         } catch (err) {
             console.error("Error creating post", err)
         }
@@ -26,7 +27,8 @@ const CreatePost = () => {
         }
         try{
             const postData = {postText};
-            await createPost(postData);
+            const newPost = await createPost(postData);
+            addNewPost(newPost);
             setPostText("");
 
         }catch(err) {
