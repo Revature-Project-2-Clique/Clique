@@ -2,8 +2,9 @@ import { useState } from "react";
 import ProfileManagement from "./ProfileManagement";
 import ConnectionDisplay from "./ConnectionDisplay";
 import Modal from 'react-modal';
+import PostList from "../post-components/PostList";
 
-const ActiveUserComponent = ({displayUser, posts, followers, following}) => {
+const ActiveUserComponent = ({displayUser, posts, followers, following, setPosts}) => {
 
     const [visible, setVisible] = useState(false);
 
@@ -11,7 +12,7 @@ const ActiveUserComponent = ({displayUser, posts, followers, following}) => {
         <>  
             <h2>{displayUser.username}</h2>
             <h3>{displayUser.firstName} {displayUser.lastName}</h3>
-            <ConnectionDisplay followers={followers} following={following} />
+            <ConnectionDisplay followers={followers} following={following} /><br/>
             <button onClick={() => setVisible(true)}>Profile Management</button>
             <Modal isOpen={visible}>
                 <div>
@@ -19,7 +20,8 @@ const ActiveUserComponent = ({displayUser, posts, followers, following}) => {
                     <ProfileManagement />
                 </div>   
             </Modal>
-           {/* This where the users posts will go once post components are made */}
+            <PostList posts={posts} setPosts={setPosts} />
+           
         </>
     )
 
