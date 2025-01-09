@@ -107,6 +107,9 @@ public class ConnectionService {
         Optional<Users> targetUsersOptional = userRepository.findById(targetUserId);
 
         if (usersOptional.isPresent() && targetUsersOptional.isPresent()) {
+            if (connectionRepository.existsByFollowerIdAndFollowingId(userId, targetUserId)){
+                throw new RuntimeException("Connection already exists");
+            }
             FollowRequest followRequest = new FollowRequest();
             followRequest.setRequesterId(userId);
             followRequest.setTargetUserId(targetUserId);
