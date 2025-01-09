@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.Clique.Entities.Users;
+import com.example.Clique.dto.UserSearchDTO;
+
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,8 +21,5 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
   
     Optional<Users> findById(Long id);
 
-    @Query("SELECT u FROM Users u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%'))")
-    List<Users> searchByUsername(@Param("query") String query);
 
-    String getUsernameByUserId(Long userId);
 }

@@ -1,7 +1,8 @@
 import React from 'react'
 import CommentComponent from './CommentComponent'
+import CommentInput from './CommentInput'
 
-const CommentList = ({comments}) => {
+const CommentList = ({comments, onAddComment}) => {
   return (
     <>
         {comments && comments.length > 0 && (
@@ -12,6 +13,7 @@ const CommentList = ({comments}) => {
                 ))}
             </div>
         )}
+        <CommentInput onAddComment={onAddComment} />
     </>
     
   )

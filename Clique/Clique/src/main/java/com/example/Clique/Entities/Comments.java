@@ -8,11 +8,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "comments")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comments {
 
     @Id
@@ -31,4 +35,9 @@ public class Comments {
 
     @Column(name = "posted_time")
     private LocalDateTime postedTime;
+
+    public Comments(Long postId, String commentText) {
+        this.postId = postId;
+        this.commentText = commentText;
+    }
 }

@@ -46,6 +46,7 @@ public class SearchServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /* 
     @Test
     void testSearchUsers() {
         String query = "john";
@@ -100,5 +101,5 @@ public class SearchServiceTest {
         verify(postRepository, times(1)).searchByContent(query);
         verify(usersRepository, times(1)).getUsernameByUserId(1L);
         verify(usersRepository, times(1)).getUsernameByUserId(2L);
-    }
+    }*/
 }

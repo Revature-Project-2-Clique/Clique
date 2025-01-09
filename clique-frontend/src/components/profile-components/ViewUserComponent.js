@@ -1,7 +1,8 @@
 import ConnectionDisplay from "./ConnectionDisplay";
 import ConnectionManagement from "./ConnectionManagement";
+import PostList from "../post-components/PostList";
 
-const ViewUserComponent = ({displayUser, posts, followers, following, getFollowers, getFollowing}) => {
+const ViewUserComponent = ({displayUser, posts, followers, following, getFollowers, getFollowing, setPosts}) => {
 
     return(
         <>
@@ -9,7 +10,7 @@ const ViewUserComponent = ({displayUser, posts, followers, following, getFollowe
             <h3>{displayUser.firstName} {displayUser.lastName}</h3>
             <ConnectionDisplay followers={followers} following={following} />
             <ConnectionManagement displayUser={displayUser} getFollowers={getFollowers} getFollowing={getFollowing} /><br/>
-            {/* This where the users posts will go once post components are made */}
+            <PostList posts={posts} setPosts={setPosts} />
         </>
     )
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Clique.Entities.Comments;
 import com.example.Clique.dto.CommentDTO;
 import com.example.Clique.service.CommentService;
 import com.example.Clique.service.UserService;
@@ -34,14 +35,10 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addComment(
-            Authentication auth,
-            @RequestBody Long postId,
-            @RequestBody String content) {
-
+    public ResponseEntity<CommentDTO> addComment(Authentication auth, @RequestBody Comments comment) {
         Long userId = getUserId(auth);
-        String message = commentService.createComment(userId, postId, content);
-        return ResponseEntity.ok(message);
+        CommentDTO cdto = commentService.createComment(userId, comment.getPostId(), comment.getCommentText());
+        return ResponseEntity.ok(cdto);
 
     }
 

@@ -30,14 +30,16 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
-    public String createComment(Long userId, Long postId, String content) {
+    public CommentDTO createComment(Long userId, Long postId, String content) {
         Comments comment = new Comments();
         comment.setPosterId(userId);
         comment.setPostId(postId);
         comment.setCommentText(content);
         comment.setPostedTime(LocalDateTime.now());
-        commentRepository.save(comment);
-        return "comment added";
+        Comments c = commentRepository.save(comment);
+        Users u = userRepository.findById(c.getPosterId()).orElseThrow(() -> new RuntimeException("User not found"));
+        CommentDTO cdto = new CommentDTO(c.getCommentId(), c.getPostId(), u.getUsername(), c.getCommentText(), c.getPostedTime());
+        return cdto;
     }
 
     public Set<CommentDTO> getComments(Long postId) {

@@ -15,3 +15,7 @@ export const searchUsers = (query, headers) =>
 // Search posts
 export const searchPosts = (query, headers) =>
     api.get(`/search/posts?query=${query}`, {headers}).then((res) => res.data);
+
+
+export const searchAllUsers = (headers) =>
+    api.get("/search/users", {headers}).then((res) => res.data);
