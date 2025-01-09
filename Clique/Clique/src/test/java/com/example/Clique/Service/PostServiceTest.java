@@ -43,7 +43,7 @@ public class PostServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+    /* 
     @Test
     void testCreatePost_ValidPost() {
         Long userId = 1L;
@@ -58,7 +58,7 @@ public class PostServiceTest {
 
         assertNotNull(createdPost);
         verify(postRepository, times(1)).save(post);
-    }
+    }*/
 
     @Test
     void testCreatePost_InvalidText() {

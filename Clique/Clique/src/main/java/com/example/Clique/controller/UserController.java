@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/edit-bio")
+    @PatchMapping("/edit-bio")
     public ResponseEntity<BioDTO> updateBio(Authentication auth, @RequestBody BioDTO bio) {
         try {
             Long userId = getUserId(auth);

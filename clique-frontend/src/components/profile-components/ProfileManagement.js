@@ -67,7 +67,9 @@ const ProfileManagement = () => {
         }
 
         try {
-            const response = await api.put("/user/edit-bio", request, {headers});
+            const response = await api.patch("/user/edit-bio", request, {headers});
+            const authorizationHeader = response.headers["authorization"];
+            const token = authorizationHeader.split(" ")[1];
             updateUser(response.data.bio, token);
 
         } catch (error) {
