@@ -40,6 +40,39 @@ const PostList = ({posts, setPosts}) => {
     }
   }
 
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      await api.delete(`/comments/delete/${commentId}`, {headers});
+      const updatedPosts = posts.map((post) =>
+        post.postId === postId
+        ? {...post, cdto: post.cdto.filter((comment)=> comment.comment_id !== commentId)}
+        : post
+      );
+      setPosts(updatedPosts);
+    } catch (err) {
+      console.error("Unable to delete comment", err);
+    }
+  }
+
+  const handleEditComment = async (postId, commentId, newText) => {
+    try {
+      const response = await api.patch(`comments/update/${commentId}`,{commentId: commentId, postId: postId, commentText: newText}, {headers});
+      const updatedComment = response.data;
+      const updatedPosts = posts.map((post) =>
+        post.postId === postId
+        ? {...post, cdto: post.cdto.map((comment) =>
+            comment.comment_id === commentId
+            ? { ...comment, comment_text: updatedComment.commentText, posted_Time: updatedComment.postedTime}
+            : comment
+          )}
+        : post
+      )
+      setPosts(updatedPosts);
+    } catch (err) {
+      console.error("Unable to update comment", err);
+    }
+  }
+
   return (
     <>
       {
@@ -48,7 +81,12 @@ const PostList = ({posts, setPosts}) => {
             <div key={post.postId}>
               <PostComponent poster={post.username} createdAt={post.postedTime} content={post.postText} />
               <LikeComponent count={post.likes} hasLiked={post.hasLiked} onLikeToggle={() => handleLikeToggle(post.postId, post.hasLiked)}/>
-              <CommentList comments={post.cdto} onAddComment={(commentText) => handleAddComment(post.postId, commentText)}/>
+              <CommentList 
+                comments={post.cdto} 
+                onAddComment={(commentText) => handleAddComment(post.postId, commentText)}
+                onDeleteComment={(commentId) => handleDeleteComment(post.postId, commentId)}
+                onEditComment={(commentId, newText) => handleEditComment(post.postId, commentId, newText)}
+              />
             </div> 
           )
         ) : (

@@ -40,4 +40,10 @@ public class Comments {
         this.postId = postId;
         this.commentText = commentText;
     }
+
+    public Comments(Long commentId, Long postId, String commentText) {
+        this.commentId = commentId;
+        this.postId = postId;
+        this.commentText = commentText;
+    }
 }

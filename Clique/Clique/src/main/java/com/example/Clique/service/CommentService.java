@@ -53,6 +53,17 @@ public class CommentService {
         return rv;
     }
 
+    public Comments updateComment(Long userId, Comments comment) {
+        Comments c = commentRepository.findById(comment.getCommentId()).orElseThrow(() -> new RuntimeException("No such comment exists"));
+        Comments rv = null;
+        if (!comment.getCommentText().isEmpty()) {
+            comment.setPosterId(userId);
+            comment.setPostedTime(LocalDateTime.now());
+            rv = commentRepository.save(comment);
+        }
+        return rv;
+    }
+
     public String deleteComment(Long userId, Long commentId) {
         
         if (commentRepository.existsById(commentId)) {

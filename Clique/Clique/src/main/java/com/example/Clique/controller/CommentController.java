@@ -16,6 +16,8 @@ import com.example.Clique.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/comments")
@@ -47,8 +49,14 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getComments(postId));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteComment(Authentication auth, @RequestBody Long commentId) {
+    @PatchMapping("/update/{commentId}")
+    public ResponseEntity<Comments> updateComment(Authentication auth, @RequestBody Comments comment) {
+        Long userId = getUserId(auth);
+        return ResponseEntity.status(200).body(commentService.updateComment(userId, comment));
+    }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<String> deleteComment(Authentication auth, @PathVariable("commentId") Long commentId) {
         Long userId = getUserId(auth);
         return ResponseEntity.ok(commentService.deleteComment(userId, commentId));
     }
