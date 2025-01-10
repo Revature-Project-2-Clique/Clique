@@ -58,6 +58,8 @@ const ProfileManagement = () => {
     const privacySubmitHandler = async (e) => {
         try {
             await api.patch("/user/change-visibility", {},{ headers })
+            const updatedUser = { ...user, private: !user.private };
+            updateUser(updatedUser); 
             setIsPrivate(!isPrivate);
         } catch (error) {
             console.error("Error changing profile privacy: ", error);
