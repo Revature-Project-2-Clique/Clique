@@ -95,8 +95,11 @@ const ProfileManagement = () => {
         <br/>
         <div>
             <button onClick = {() => setCurrentForm("name")}>Update Name</button>
+            <br/>
             <button onClick = {() => setCurrentForm("password")}>Change Password</button>
+            <br/>
             <button onClick = {() => setCurrentForm("privacy")}>Change Privacy</button>
+            <br/>
             <button onClick = {() => setCurrentForm("bio")}>Update Bio</button>
         </div>
         <br/>
@@ -130,7 +133,6 @@ const ProfileManagement = () => {
 
         {currentForm === "bio" && (
             <ChangeBio 
-                bio={bio}
                 setBios = {setBios}
                 bioSubmitHandler={bioSubmitHandler}
             />
