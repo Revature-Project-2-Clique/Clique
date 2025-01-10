@@ -31,6 +31,7 @@ const UserProfileComponent = () => {
         try {
             const response = await api.get(`/user/${id}`, { headers });
             setResponseUser(response.data);
+            console.log(response.data)
             if (response.data.userId === user.userId) {
                 setIsCurrentUser(true);
             } else {

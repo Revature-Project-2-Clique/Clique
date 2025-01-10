@@ -12,5 +12,6 @@ public class UsersDTO {
     private String username;
     private String firstName;
     private String lastName;
+    private String bio;
     private boolean isPrivate;
 }

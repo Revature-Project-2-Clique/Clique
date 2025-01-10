@@ -31,9 +31,9 @@ public class PostController {
     }
 
     @PostMapping
-    private ResponseEntity<Posts> createPost(Authentication auth, @RequestBody Posts post) {
+    private ResponseEntity<PostDTO> createPost(Authentication auth, @RequestBody Posts post) {
         Long userId = getUserId(auth);
-        Posts createdPost = postService.createPost(userId, post);
+        PostDTO createdPost = postService.createPost(userId, post);
         return ResponseEntity.status(200).body(createdPost);
     }
 
