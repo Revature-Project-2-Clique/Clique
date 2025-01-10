@@ -1,4 +1,4 @@
-const ChangeBio = ({bio, setBios, bioSubmitHandler}) => {
+const ChangeBio = ({setBios, bioSubmitHandler}) => {
     return ( 
         <>
         <form onSubmit={bioSubmitHandler}>
@@ -6,7 +6,7 @@ const ChangeBio = ({bio, setBios, bioSubmitHandler}) => {
             <input
                 name="bio"
                 type="text"
-                value={bio}
+                placeholder="Change me..."
                 onChange={(e) => setBios(e.target.value)} 
             />
             <br/>
