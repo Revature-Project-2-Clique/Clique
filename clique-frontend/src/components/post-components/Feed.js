@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import api from "../../service/api";
 import { useUser } from '../UserContext';
+import CreatePost from './CreatePost';
 import PostList from './PostList'
 
 const Feed = ({explore}) => {
@@ -24,8 +25,13 @@ const Feed = ({explore}) => {
         loadFeed();
     },[]);
 
+    const addNewPost = (newPost) => {
+        setPosts((prevPosts) => [newPost, ...prevPosts]);
+    }
+
     return (
         <>
+            {explore ? <></> : <CreatePost addNewPost={addNewPost}/> }
             {
                 loading ? (
                     <p>Loading posts...</p>

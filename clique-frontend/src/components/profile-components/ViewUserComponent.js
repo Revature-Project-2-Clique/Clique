@@ -29,8 +29,10 @@ const ViewUserComponent = ({displayUser, posts, followers, following, getFollowe
         <>
             <h2>{displayUser.username}</h2>
             <h3>{displayUser.firstName} {displayUser.lastName}</h3>
+            <h3>Bio: {displayUser.bio}</h3>
             <ConnectionDisplay followers={followers} following={following} /><br/>
             <ConnectionManagement displayUser={displayUser} getFollowers={getFollowers} getFollowing={getFollowing} connection={connection} setConnection={setConnection} /><br/>
+
             <PostList posts={posts} setPosts={setPosts} />
         </>
     )

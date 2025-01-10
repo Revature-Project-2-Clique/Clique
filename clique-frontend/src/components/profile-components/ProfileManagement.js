@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../UserContext";
 import ChangeName from "./ChangeName";
 import ChangePassword from "./ChangePassword";
+import ChangeBio from "./ChangeBio";
 import api from "../../service/api";
 import axios from "axios";
 import ChangePrivacy from "./ChangePrivacy";
@@ -18,6 +19,9 @@ const ProfileManagement = () => {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [isPrivate, setIsPrivate] = useState(user.private);
+    const [showChangeName, setShowChangeName] = useState(true);
+    const [bio, setBios] = useState(user.bio)
+
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -55,6 +59,7 @@ const ProfileManagement = () => {
         }
     }
 
+
     const privacySubmitHandler = async (e) => {
         try {
             await api.patch("/user/change-visibility", {},{ headers })
@@ -62,7 +67,24 @@ const ProfileManagement = () => {
         } catch (error) {
             console.error("Error changing profile privacy: ", error);
         }
-    }
+
+    const bioSubmitHandler = async (e) => {
+        e.preventDefault();
+
+        const request = {
+            bio: bio
+        }
+
+        try {
+            const response = await api.patch("/user/edit-bio", request, {headers});
+            const authorizationHeader = response.headers["authorization"];
+            const token = authorizationHeader.split(" ")[1];
+            updateUser(response.data.bio, token);
+
+        } catch (error) {
+            console.error("Error updating bio: ", error);
+
+        }
 
 
 
@@ -106,6 +128,15 @@ const ProfileManagement = () => {
         )}
 
     </>
+
+        <br/>
+        <ChangeBio bio={bio} setBios = {setBios} bioSubmitHandler={bioSubmitHandler}  />
+        <br/>
+        <button onClick = {() => setShowChangeName(!showChangeName)}>
+            {showChangeName ? "Change your password" : "Change your name"}
+        </button>
+        </>
+
     );
 
 

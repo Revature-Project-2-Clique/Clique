@@ -19,7 +19,8 @@ const ChangeName = ({firstName, lastName, nameSubmitHandler, setFirstName, setLa
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
-            /><br/><br/>
+            />
+            <br/><br/>
             <button>Submit Changes</button><br/>
         </form>
         </>

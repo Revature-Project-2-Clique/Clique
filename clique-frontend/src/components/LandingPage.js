@@ -18,7 +18,6 @@ const LandingPage = () => {
     return(
         <>
             <h2>Welcome {user.username}</h2>
-            <CreatePost />
             <Feed explore={false}/>
             {/* Placeholder for Feed Component */}
         </>
