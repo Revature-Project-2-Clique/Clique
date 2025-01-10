@@ -7,18 +7,21 @@ export const UserProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
-    const updateUser = (newUser, newToken) => {
+    const updateUser = (newUser) => {
         setUser(newUser);  
-        setToken(newToken);
     }
 
+    const updateToken = (newToken) => {
+        setToken(newToken);
+    }
+    
     const clearUser = () => {
         setUser(null);
         setToken(null)
     }
 
     return (
-        <UserContext.Provider value ={{ user, token, updateUser, clearUser }}>
+        <UserContext.Provider value ={{ user, token, updateUser, clearUser, updateToken }}>
             {children}
         </UserContext.Provider>
     );

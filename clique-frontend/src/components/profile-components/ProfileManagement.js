@@ -5,6 +5,7 @@ import ChangePassword from "./ChangePassword";
 import ChangeBio from "./ChangeBio";
 import api from "../../service/api";
 import axios from "axios";
+import ChangePrivacy from "./ChangePrivacy";
 
 axios.defaults.withCredentials = true;
 
@@ -12,12 +13,15 @@ const ProfileManagement = () => {
     const { user, token } = useUser();
     const { updateUser } = useUser();
 
+    const [currentForm, setCurrentForm] = useState("name");     // state profile management forms, name/password/privacy
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [isPrivate, setIsPrivate] = useState(user.private);
     const [showChangeName, setShowChangeName] = useState(true);
     const [bio, setBios] = useState(user.bio)
+
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -48,16 +52,21 @@ const ProfileManagement = () => {
         }
 
         try{
-            const response = await api.patch("/user/update-name", request, { headers });
-
-            const authorizationHeader = response.headers["authorization"];
-            const token = authorizationHeader.split(" ")[1];
-            
-            updateUser(response.data, token);
+            const response = await api.patch("/user/update-name", request, { headers })
+            updateUser(response.data);
         } catch (error) {
             console.error("Error updating name: ", error);
         }
     }
+
+
+    const privacySubmitHandler = async (e) => {
+        try {
+            await api.patch("/user/change-visibility", {},{ headers })
+            setIsPrivate(!isPrivate);
+        } catch (error) {
+            console.error("Error changing profile privacy: ", error);
+        }
 
     const bioSubmitHandler = async (e) => {
         e.preventDefault();
@@ -74,8 +83,8 @@ const ProfileManagement = () => {
 
         } catch (error) {
             console.error("Error updating bio: ", error);
+
         }
-    }
 
 
 
@@ -84,17 +93,42 @@ const ProfileManagement = () => {
         <br/><br/>
         <h2>Profile Management</h2>
         <br/>
-        {
-            showChangeName ? 
-            <ChangeName firstName={firstName} lastName={lastName} nameSubmitHandler={nameSubmitHandler} setFirstName = {setFirstName} setLastName={setLastName} /> 
-            :
-            <ChangePassword password={password} 
-                            newPassword = {newPassword} 
-                            passwordSubmitHandler={passwordSubmitHandler} 
-                            setPassword={setPassword} 
-                            setNewPassword={setNewPassword} />
-            
-        }
+        <div>
+            <button onClick = {() => setCurrentForm("name")}>Update Name</button>
+            <button onClick = {() => setCurrentForm("password")}>Change Password</button>
+            <button onClick = {() => setCurrentForm("privacy")}>Change Privacy</button>
+        </div>
+        <br/>
+        {currentForm === "name" && (
+                <ChangeName
+                    firstName={firstName}
+                    lastName={lastName}
+                    nameSubmitHandler={nameSubmitHandler}
+                    setFirstName={setFirstName}
+                    setLastName={setLastName}
+                />
+        )}
+        
+        {currentForm === "password" && (
+            <ChangePassword 
+                password={password} 
+                newPassword = {newPassword} 
+                passwordSubmitHandler={passwordSubmitHandler} 
+                setPassword={setPassword} 
+                setNewPassword={setNewPassword} 
+            />
+        )}
+
+        {currentForm === "privacy" && (
+            <ChangePrivacy 
+                isPrivate={isPrivate} 
+                setIsPrivate = {setIsPrivate} 
+                privacySubmitHandler={privacySubmitHandler} 
+            />
+        )}
+
+    </>
+
         <br/>
         <ChangeBio bio={bio} setBios = {setBios} bioSubmitHandler={bioSubmitHandler}  />
         <br/>
@@ -102,7 +136,9 @@ const ProfileManagement = () => {
             {showChangeName ? "Change your password" : "Change your name"}
         </button>
         </>
+
     );
+
 
 }
 
