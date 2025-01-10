@@ -19,7 +19,6 @@ const ProfileManagement = () => {
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [isPrivate, setIsPrivate] = useState(user.private);
-    const [showChangeName, setShowChangeName] = useState(true);
     const [bio, setBios] = useState(user.bio);
 
 
@@ -80,9 +79,8 @@ const ProfileManagement = () => {
 
         try {
             const response = await api.patch("/user/edit-bio", request, {headers});
-            const authorizationHeader = response.headers["authorization"];
-            const token = authorizationHeader.split(" ")[1];
-            updateUser(response.data.bio);
+            const updatedUser = { ...user, bio: response.bio};
+            updateUser(updatedUser);
 
         } catch (error) {
             console.error("Error updating bio: ", error);
