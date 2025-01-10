@@ -7,7 +7,7 @@ const LoginComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { updateUser } = useUser();
+  const { updateUser, updateToken } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,7 +17,8 @@ const LoginComponent = () => {
       const response = await api.post("/auth/login", userData);
       const authorizationHeader = response.headers["authorization"];
       const token = authorizationHeader.split(" ")[1];
-      updateUser(response.data, token);
+      updateToken(token);
+      updateUser(response.data);
       navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);

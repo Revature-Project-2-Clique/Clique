@@ -7,18 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-
-    private String firstName;
-
-    private String lastName;
-
-    private String username;
-
-    private Long userId;
-
+public class BioDTO {
     private String bio;
-
-    
-
 }

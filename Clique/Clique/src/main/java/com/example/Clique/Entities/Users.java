@@ -32,17 +32,21 @@ public class Users {
     @Column(unique = true)
     private String username;
 
+    @Column(nullable = true)
+    private String bio;
+
     public Users() {
 
     }
 
 
-    public Users (String firstName, String lastName, String email, String password, String username, boolean isPrivate) {
+    public Users (String firstName, String lastName, String email, String password, String username, String bio, boolean isPrivate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.bio = bio;
         this.isPrivate = isPrivate;
     }
 

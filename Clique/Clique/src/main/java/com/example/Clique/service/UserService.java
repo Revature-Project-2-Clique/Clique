@@ -1,5 +1,6 @@
 package com.example.Clique.service;
 
+import com.example.Clique.dto.BioDTO;
 import com.example.Clique.dto.UpdateNameDTO;
 import com.example.Clique.dto.UpdatePasswordDTO;
 import com.example.Clique.dto.UsersDTO;
@@ -108,6 +109,7 @@ public class UserService {
         dto.setLastName(user.getLastName());
         dto.setUsername(user.getUsername());
         dto.setUserId(user.getUserId());
+        dto.setBio(user.getBio());
         dto.setPrivate(user.getIsPrivate());
         return dto;
     }
@@ -117,11 +119,23 @@ public class UserService {
         return mapToDTO(loggedIn);
     }
 
+    public BioDTO updateBio(Long userId, BioDTO bio) throws IllegalAccessException {
+        Users user = usersRepository.findById(userId).orElseThrow(() -> new IllegalAccessException("User not found"));
+
+        user.setBio(bio.getBio());
+        
+        usersRepository.save(user);
+
+        return new BioDTO(user.getBio());
+        
+    }
+
     public String changeVisibility(Long userId){
         Optional<Users> usersOptional = usersRepository.findById(userId);
         if(usersOptional.isPresent()){
             Users user = usersOptional.get();
             user.setIsPrivate(!user.getIsPrivate());
+            usersRepository.save(user);
             return "Visibility updated";
         }
         throw new RuntimeException("User not found");

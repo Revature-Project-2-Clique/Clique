@@ -1,6 +1,7 @@
 package com.example.Clique.controller;
 
 import com.example.Clique.Entities.Users;
+import com.example.Clique.dto.BioDTO;
 import com.example.Clique.dto.UpdateNameDTO;
 import com.example.Clique.dto.UpdatePasswordDTO;
 import com.example.Clique.dto.UsersDTO;
@@ -52,6 +53,18 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/edit-bio")
+    public ResponseEntity<BioDTO> updateBio(Authentication auth, @RequestBody BioDTO bio) {
+        try {
+            Long userId = getUserId(auth);
+
+            BioDTO updatedUser = userService.updateBio(userId, bio);
+            
+            return ResponseEntity.ok(updatedUser);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
     @PatchMapping("/change-visibility")
     public ResponseEntity<String> changeVisibility(Authentication auth) {
         Long userId = getUserId(auth);
