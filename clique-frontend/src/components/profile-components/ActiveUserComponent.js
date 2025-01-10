@@ -13,7 +13,6 @@ const ActiveUserComponent = ({displayUser, posts, followers, following, setPosts
             <h2>{displayUser.username}</h2>
             <h3>{displayUser.firstName} {displayUser.lastName}</h3>
             <h3>Bio: {displayUser.bio}</h3>
-            <ConnectionDisplay followers={followers} following={following} />
             <ConnectionDisplay followers={followers} following={following} /><br/>
             <button onClick={() => setVisible(true)}>Profile Management</button>
             <Modal isOpen={visible}>
