@@ -29,7 +29,8 @@ The goal is to deploy a fully functional, containerized application with CI/CD p
 If you want to fork this repository and deploy your own verison of our application in the same way we did you can follow these steps:
 ### Required Software and AWS Services 
 - [Docker](https://docs.docker.com/), to dockerize your backend and to run the container.
-- [Jenkins](https://www.jenkins.io/doc/), either locally running or running on a server. This project runs Jenkins on an EC2 instance and uses a second EC2 instance as an agent node.
+- [Jenkins](https://www.jenkins.io/doc/), either locally running or running on a server. 
+    - This project runs Jenkins on an EC2 instance and uses a second EC2 instance as an agent node.
 - An [EC2](https://docs.aws.amazon.com/ec2/) instance to run the backend container.
 - An [S3](https://docs.aws.amazon.com/s3/) bucket to host the frontend.
 - [RDS](https://docs.aws.amazon.com/rds/) or any database administration/management tool of your choice. 
