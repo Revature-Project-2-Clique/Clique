@@ -50,6 +50,28 @@ public class PostService {
         return mapToPostDTO(rv, userId);
     }
 
+    public Posts updatePost(Posts post) {
+        Optional<Posts> postOptional = postRepository.findById(post.getPostId());
+        Posts rv = null;
+        if (postOptional.isPresent()) {
+            Posts p = postOptional.get();
+            p.setPostText(post.getPostText());
+            p.setPostedTime(LocalDateTime.now());
+            rv = postRepository.save(p);
+        } else {
+            throw new RuntimeException("No such post exist");
+        }
+        return rv;
+    }
+
+    public String deletePost(Long postId) {
+        if (postRepository.existsById(postId)) {
+            postRepository.deleteById(postId);
+            return "post deleted";
+        }
+        return "No such post exists";
+    }
+
     public List<Posts> getAllPosts(Long userId) {
         return (List<Posts>) postRepository.findAll();
     }
