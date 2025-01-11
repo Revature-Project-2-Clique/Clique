@@ -30,6 +30,7 @@ const PostComponent = ({poster, createdAt, content, onDeletePost, onEditPost}) =
             {isEditing ? (
                 <div>
                     <textarea
+                        rows="4"
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
                     />
