@@ -10,10 +10,35 @@ const PostList = ({posts, setPosts}) => {
   const {user, token} = useUser();
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
+  const handleUpdatePost = async (postId, postText) => {
+    try {
+      const response = await api.patch(`/posts`, {postId, postText}, {headers});
+      const updatedPost = response.data;
+      const updatedPosts = posts.map((post) => 
+        post.postId === postId
+        ? {...post, postText: updatedPost.postText, postedTime: updatedPost.postedTime}
+        : post
+      );
+      setPosts(updatedPosts);
+    } catch (err) {
+      console.error("Unable to update post", err);
+    }
+  }
+
+  const handleDeletePost = async(postId) => {
+    try {
+      await api.delete(`/posts/${postId}`,{headers});
+      const updatedPosts = posts.filter((post) => post.postId !== postId);
+      setPosts(updatedPosts);
+    } catch (err) {
+      console.error("Unable to delete post", err);
+    }
+  }
+
   const handleLikeToggle = async (postId, hasLiked) => {
     try {
       const endpoint = hasLiked ? `/reactions/${postId}/unlike` : `reactions/${postId}/like`;
-      const response = hasLiked ? await api.delete(endpoint, {headers}) : await api.post(endpoint, null, {headers});
+      hasLiked ? await api.delete(endpoint, {headers}) : await api.post(endpoint, null, {headers});
       const updatedPosts = posts.map((post) => 
         post.postId === postId 
         ? {...post, likes: post.likes + (hasLiked ? -1 : 1), hasLiked: !hasLiked} 
@@ -79,7 +104,13 @@ const PostList = ({posts, setPosts}) => {
         posts.length > 0 ? (
           posts.map((post) =>
             <div key={post.postId}>
-              <PostComponent poster={post.username} createdAt={post.postedTime} content={post.postText} />
+              <PostComponent 
+                poster={post.username} 
+                createdAt={post.postedTime} 
+                content={post.postText}
+                onEditPost={post.username === user.username ? (newText) => handleUpdatePost(post.postId, newText) : null} 
+                onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
+              />
               <LikeComponent count={post.likes} hasLiked={post.hasLiked} onLikeToggle={() => handleLikeToggle(post.postId, post.hasLiked)}/>
               <CommentList 
                 comments={post.cdto} 

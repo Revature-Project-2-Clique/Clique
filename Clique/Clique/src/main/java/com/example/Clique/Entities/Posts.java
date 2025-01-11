@@ -31,4 +31,9 @@ public class Posts {
     public Posts(String postText) {
         this.postText = postText;
     }
+
+    public Posts(Long postId, String postText) {
+        this.postId = postId;
+        this.postText = postText;
+    }
 }
