@@ -35,7 +35,7 @@ If you want to fork this repository and deploy your own verison of our applicati
 - An [S3](https://docs.aws.amazon.com/s3/) bucket to host the frontend.
 - [RDS](https://docs.aws.amazon.com/rds/) or any database administration/management tool of your choice. 
 
-### Configuring the Backend:
+### Configuring the Backend
 1. Update ```application.properties``` to configure the connection to your database.
     - Properties to be updated:
         - spring.datasource.url
