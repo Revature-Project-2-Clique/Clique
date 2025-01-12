@@ -37,6 +37,16 @@ public class PostController {
         return ResponseEntity.status(200).body(createdPost);
     }
 
+    @PatchMapping
+    private ResponseEntity<Posts> updatePost(Authentication auth, @RequestBody Posts post) {
+        return ResponseEntity.status(200).body(postService.updatePost(post));
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<String> deletePost(Authentication auth, @PathVariable("id") Long id) {
+        return ResponseEntity.status(200).body(postService.deletePost(id));
+    }
+
     @GetMapping("/feed")
     private ResponseEntity<List<PostDTO>> getUserFeed(Authentication auth) {
         Long userId = getUserId(auth);

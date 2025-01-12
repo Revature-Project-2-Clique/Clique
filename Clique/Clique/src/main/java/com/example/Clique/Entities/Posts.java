@@ -38,4 +38,9 @@ public class Posts {
         this.posterId = m;
         this.postedTime = now;
     }
+    
+    public Posts(Long postId, String postText) {
+        this.postId = postId;
+        this.postText = postText;
+    }
 }
