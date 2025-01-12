@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,9 +21,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.example.Clique.Entities.Connections;
+import com.example.Clique.Entities.FollowRequest;
 import com.example.Clique.Entities.Users;
 import com.example.Clique.dto.UserDTO;
 import com.example.Clique.repository.ConnectionRepository;
+import com.example.Clique.repository.FollowRequestRepository;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
 import com.example.Clique.service.ConnectionService;
@@ -33,10 +36,10 @@ public class ConnectionServiceTest {
     private ConnectionRepository connectionRepository;
 
     @Mock
-    private UsersRepository usersRepository;
+    private UsersRepository userRepository;
 
     @Mock
-    private JwtUtil jwtUtil;
+    private FollowRequestRepository followRequestRepository;
 
     @InjectMocks
     private ConnectionService connectionService;
@@ -45,45 +48,79 @@ public class ConnectionServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-/* 
+
     @Test
-    void testFollowUser() {
-        Long userId = 99L;
-        Long whoToFollow = 98L;
+    void testFollowUser_Success() {
+        // Arrange
+        Long followerId = 1L;
+        Long whoToFollow = 2L;
 
-        Users user = new Users(); // Assuming a default constructor for the Users class.
-        Connections connection = new Connections(userId, whoToFollow);
+        Users userToFollow = new Users();
+        userToFollow.setUserId(whoToFollow);
 
-        // Mock the user repository to return a user for the given ID.
-        when(usersRepository.findById(whoToFollow)).thenReturn(Optional.of(user));
+        when(userRepository.findById(whoToFollow)).thenReturn(Optional.of(userToFollow));
+        when(connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToFollow)).thenReturn(false);
+        when(connectionRepository.save(any(Connections.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(connectionRepository.existsByFollowerIdAndFollowingId(userId, whoToFollow)).thenReturn(false);
-        when(connectionRepository.save(any(Connections.class))).thenReturn(connection);
+        // Act
+        Connections result = connectionService.followUser(followerId, whoToFollow);
 
-        Connections result = connectionService.followUser(userId, whoToFollow);
-
-        //assertNotNull(result);
-        assertEquals(userId, result.getFollowerId());
+        // Assert
+        assertNotNull(result);
+        assertEquals(followerId, result.getFollowerId());
         assertEquals(whoToFollow, result.getFollowingId());
-        verify(usersRepository, times(1)).findById(whoToFollow);
-        verify(connectionRepository, times(1)).existsByFollowerIdAndFollowingId(userId, whoToFollow);
+
+        // Verify interactions
+        verify(userRepository, times(1)).findById(whoToFollow);
+        verify(connectionRepository, times(1)).existsByFollowerIdAndFollowingId(followerId, whoToFollow);
         verify(connectionRepository, times(1)).save(any(Connections.class));
-    }*/
-
-
+    }
 
     @Test
-    void testGetAllFollowing() {
-        Long userId = 1L;
+    void testUnfollowUser_Success() {
+        // Arrange
+        Long followerId = 1L;
+        Long whoToUnfollow = 2L;
 
-        Connections connection1 = new Connections(userId, 2L);
-        Connections connection2 = new Connections(userId, 3L);
+        Connections connection = new Connections();
+        connection.setFollowerId(followerId);
+        connection.setFollowingId(whoToUnfollow);
 
-        when(connectionRepository.findAllByFollowingId(userId)).thenReturn(List.of(connection1, connection2));
+        when(connectionRepository.existsByFollowerIdAndFollowingId(followerId, whoToUnfollow)).thenReturn(true);
+        when(connectionRepository.findByFollowerIdAndFollowingId(followerId, whoToUnfollow)).thenReturn(connection);
 
-        List<Connections> allFollowing = connectionService.getAllFollowing(userId);
+        // Act
+        Integer result = connectionService.unfollowUser(followerId, whoToUnfollow);
 
-        assertEquals(2, allFollowing.size());
-        verify(connectionRepository, times(1)).findAllByFollowingId(userId);
+        // Assert
+        assertEquals(1, result);
+        verify(connectionRepository, times(1)).existsByFollowerIdAndFollowingId(followerId, whoToUnfollow);
+        verify(connectionRepository, times(1)).findByFollowerIdAndFollowingId(followerId, whoToUnfollow);
+        verify(connectionRepository, times(1)).delete(connection);
     }
+
+    @Test
+    void testSendFollowRequest_Success() {
+        // Arrange
+        Long userId = 1L;
+        Long targetUserId = 2L;
+
+        Users user = new Users();
+        user.setUserId(userId);
+
+        Users targetUser = new Users();
+        targetUser.setUserId(targetUserId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(targetUserId)).thenReturn(Optional.of(targetUser));
+        when(connectionRepository.existsByFollowerIdAndFollowingId(userId, targetUserId)).thenReturn(false);
+        when(followRequestRepository.existsByRequesterIdAndTargetUserId(userId, targetUserId)).thenReturn(false);
+
+        // Act
+        connectionService.sendFollowRequest(userId, targetUserId);
+
+        // Assert
+        verify(followRequestRepository, times(1)).save(any(FollowRequest.class));
+    }
+
 }
