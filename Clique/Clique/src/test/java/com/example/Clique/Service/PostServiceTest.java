@@ -201,4 +201,52 @@ public class PostServiceTest {
         verify(usersRepository, times(2)).findById(2L);
         verify(usersRepository, times(2)).findById(3L);
     }
+
+    @Test
+    void testUpdatePost_Success() {
+        // Arrange
+        Long postId = 1L;
+        Posts existingPost = new Posts();
+        existingPost.setPostId(postId);
+        existingPost.setPostText("Original Text");
+
+        Posts updatedPost = new Posts();
+        updatedPost.setPostId(postId);
+        updatedPost.setPostText("Updated Text");
+
+        when(postRepository.findById(postId)).thenReturn(Optional.of(existingPost));
+        when(postRepository.save(any(Posts.class))).thenAnswer(invocation -> {
+            Posts p = invocation.getArgument(0);
+            p.setPostedTime(LocalDateTime.now());
+            return p;
+        });
+
+        // Act
+        Posts result = postService.updatePost(updatedPost);
+
+        // Assert
+        assertNotNull(result, "Expected a non-null updated post");
+        assertEquals("Updated Text", result.getPostText(), "Post text should match the updated value");
+        assertNotNull(result.getPostedTime(), "Posted time should be updated");
+        verify(postRepository, times(1)).findById(postId);
+        verify(postRepository, times(1)).save(existingPost);
+    }
+
+    @Test
+    void testDeletePost_Success() {
+        // Arrange
+        Long postId = 1L;
+
+        when(postRepository.existsById(postId)).thenReturn(true);
+
+        // Act
+        String result = postService.deletePost(postId);
+
+        // Assert
+        assertEquals("post deleted", result, "Expected a success message for post deletion");
+        verify(postRepository, times(1)).existsById(postId);
+        verify(postRepository, times(1)).deleteById(postId);
+    }
+
+    
 }
