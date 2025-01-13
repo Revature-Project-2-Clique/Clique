@@ -18,7 +18,6 @@ const PostComponent = ({poster, userId, createdAt, content, onDeletePost, onEdit
        <Link to={`/user/${userId}`} className="username-link">
       <h4 className="text-xl font-bold text-[#003a92]">{poster}</h4>
       </Link>
-      {console.log(poster.id)}
       <small className="text-gray-600">{new Date(createdAt).toLocaleString()}</small>
       {!isEditing && onDeletePost && (
         <div className="space-x-2 mt-2">
