@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoginComponent from "./LoginComponent";
 import RegisterComponent from "./RegisterComponent";
-import welcomeImage from '../../images/welcome.png';
+import welcomeImage from '../../images/welcome-no-white.png';
 
 const AuthParentComponent = () => {
   const [showLogin, setShowLogin] = useState(true);
