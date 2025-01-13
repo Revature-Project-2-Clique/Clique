@@ -21,12 +21,24 @@ const ConnectionDisplay = ({followers, following}) => {
 
     return (
         <>
-            <span onClick={() => displayList("followers")}>Followers: {followers.length}</span><br/>
-            <span onClick={() => displayList("following")}>Following: {following.length}</span>
+                <div className="flex space-x-4 text-sm text-gray-800">
+        <span
+          onClick={() => displayList("followers")}
+          className="cursor-pointer text-[#003a92] hover:underline"
+        >
+          Followers: {followers.length}
+        </span>
+        <span
+          onClick={() => displayList("following")}
+          className="cursor-pointer text-[#003a92] hover:underline"
+        >
+          Following: {following.length}
+        </span>
+      </div>
             <Modal isOpen={visible}>
-                <div>
+                <div className="font-exo">
                     <button onClick={close}>Close</button>
-                    <ConnectionList connections={listType === "followers" ? followers : following} title={listType === "followers" ? "Followers:" : "Following:"} />
+                    <ConnectionList onLinkClick={close} connections={listType === "followers" ? followers : following} title={listType === "followers" ? "Followers:" : "Following:"} />
                 </div>   
             </Modal>
         </>

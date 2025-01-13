@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LoginComponent from "./LoginComponent";
 import RegisterComponent from "./RegisterComponent";
+import welcomeImage from '../../images/welcome.png';
 
 const AuthParentComponent = () => {
   const [showLogin, setShowLogin] = useState(true);
@@ -8,7 +9,7 @@ const AuthParentComponent = () => {
   const image =
   "https://www.inclusionhub.com/hubfs/Blog/Diverse-multiracial-and-multicultural-group-of-people-standing-together.jpg";
   return (
-    <div className="font-[sans-serif] max-sm:px-4">
+    <div className=" max-sm:px-4">
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div
           className="
@@ -19,15 +20,17 @@ const AuthParentComponent = () => {
           "
         >
           <div className="flex flex-col justify-center h-full px-4 py-4">
-            <h2 className="text-gray-800 text-3xl font-extrabold">
-              Welcome to Clique
-            </h2>
+          <img
+                src={welcomeImage}
+               
+                alt="welcome"
+            />
             <br />
             {showLogin ? <LoginComponent /> : <RegisterComponent />}
             <br />
             <button
               onClick={() => setShowLogin(!showLogin)}
-              className="text-blue-600 font-semibold hover:underline"
+              className="text-[#003a92] font-semibold hover:underline"
             >
               {showLogin ? "New user? Register" : "Existing user? Sign in"}
             </button>

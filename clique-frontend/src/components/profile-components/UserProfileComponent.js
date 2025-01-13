@@ -1,110 +1,152 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Modal from "react-modal";
+import ProfileManagement from "./ProfileManagement";
+import ConnectionDisplay from "./ConnectionDisplay";
+import ConnectionManagement from "./ConnectionManagement";
+import PostList from "../post-components/PostList";
 import { useUser } from "../UserContext";
 import { useParams } from "react-router-dom";
-import ActiveUserComponent from "./ActiveUserComponent";
-import ViewUserComponent from "./ViewUserComponent";
 import api from "../../service/api";
 
 axios.defaults.withCredentials = true;
 
 const UserProfileComponent = () => {
+  const { user, token } = useUser();
+  const { id } = useParams();
 
-    const { user, token } = useUser();
-    const { id } = useParams();
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const [responseUser, setResponseUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [connection, setConnection] = useState(null);
 
-    // flag to determine if the requested user profile is the logged in user
-    const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    // state to store user information
-    const [responseUser, setResponseUser] = useState(null);
-
-    // states used for child component rendering
-    const [posts, setPosts] = useState([]);
-    const [followers, setFollowers] = useState([]);
-    const [following, setFollowing] = useState([]);
-
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-
-    const getUserInformation = async () => {
-        try {
-            const response = await api.get(`/user/${id}`, { headers });
-            setResponseUser(response.data);
-            console.log(response.data)
-            if (response.data.userId === user.userId) {
-                setIsCurrentUser(true);
-            } else {
-                setIsCurrentUser(false);
-            }
-        } catch (error) {
-            console.error('Error getting user: ', error);
-        }
+  const getUserInformation = async () => {
+    try {
+      const response = await api.get(`/user/${id}`, { headers });
+      setResponseUser(response.data);
+      if (response.data.userId === user.userId) {
+        setIsCurrentUser(true);
+      } else {
+        setIsCurrentUser(false);
+      }
+    } catch (error) {
+      console.error("Error getting user: ", error);
     }
+  };
 
-    const getPosts = async () => {
-        try {
-            const response = await api.get(`/posts/poster/${id}`, { headers });
-            setPosts(response.data);
-        } catch (error) {
-            console.error("Error getting posts: ", error);
-        }
+  const getPosts = async () => {
+    try {
+      const response = await api.get(`/posts/poster/${id}`, { headers });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error getting posts: ", error);
     }
+  };
 
-    const getFollowers = async() => {
-        try {
-            const response = await api.get(`/connection/${id}/followers`, { headers });
-            setFollowers(response.data);
-        } catch (error) {
-            console.error("Error getting followers: ", error);
-        }
+  const getFollowers = async () => {
+    try {
+      const response = await api.get(`/connection/${id}/followers`, { headers });
+      setFollowers(response.data);
+    } catch (error) {
+      console.error("Error getting followers: ", error);
     }
+  };
 
-    const getFollowing = async() => {
-        try {
-            const response = await api.get(`/connection/${id}/following`, { headers });
-            setFollowing(response.data);
-        } catch (error) {
-            console.error("Error getting followers: ", error);
-        }
+  const getFollowing = async () => {
+    try {
+      const response = await api.get(`/connection/${id}/following`, { headers });
+      setFollowing(response.data);
+    } catch (error) {
+      console.error("Error getting following: ", error);
     }
+  };
 
-    useEffect(() => {
-        getUserInformation();
-        getPosts();
-        getFollowers();
-        getFollowing();
-    }, [id, user]);
-
-
-    if (!responseUser) {
-        return <div>Loading...</div>; // Show a loading message while data is being fetched
+  const getConnectionStatus = async () => {
+    try {
+      const response = await api.get(
+        `/connection/${user.userId}/isFollowing/${responseUser.userId}`,
+        { headers }
+      );
+      setConnection(response.data);
+    } catch (error) {
+      console.error("Error getting connection status: ", error);
     }
+  };
 
-    if(isCurrentUser){
-        return (
-            <ActiveUserComponent
-                displayUser={responseUser}
-                posts={posts}
-                followers={followers}
-                following={following}
-                setPosts={setPosts}
-            />
-        );
-    } else {
-        return (
-            <ViewUserComponent
-                displayUser={responseUser}
-                posts={posts}
-                followers={followers}
-                following={following}
-                getFollowers={getFollowers}
-                getFollowing={getFollowing}
-                setPosts={setPosts}
-            />
-        );
+  useEffect(() => {
+    getUserInformation();
+    getPosts();
+    getFollowers();
+    getFollowing();
+  }, [id, user]);
+
+  useEffect(() => {
+    if (!isCurrentUser && responseUser) {
+      getConnectionStatus();
     }
+  }, [isCurrentUser, responseUser]);
 
-}
+  if (!responseUser) {
+    return <div>Loading...</div>;
+  }
+
+  const hideContent = responseUser.private && !connection;
+
+  return (
+    <div className="max-w-screen-xl mx-auto p-6 bg-white shadow-md rounded-md space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-[#003a92]">{responseUser.username}</h2>
+        <h3 className="text-lg text-gray-700">
+          {responseUser.firstName} {responseUser.lastName}
+        </h3>
+      </div>
+      <ConnectionDisplay followers={followers} following={following} />
+      {isCurrentUser ? (
+        <>
+          <button
+            onClick={() => setVisible(true)}
+            className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#002e74] hover:bg-[#004dbd] focus:outline-none"
+          >
+            Profile Management
+          </button>
+          <Modal isOpen={visible}>
+            <div className="font-exo">
+              <button onClick={() => setVisible(false)}>Close</button>
+              <ProfileManagement />
+            </div>
+          </Modal>
+        </>
+      ) : hideContent ? (
+        <>
+          <ConnectionManagement
+            displayUser={responseUser}
+            getFollowers={getFollowers}
+            getFollowing={getFollowing}
+            connection={connection}
+            setConnection={setConnection}
+          /><br/>
+          <p>This user's profile is private, only approved followers can view their posts and personal details.</p>
+        </>
+      ) : (
+        <>
+          <h3>Bio: {responseUser.bio}</h3>
+          <ConnectionManagement
+            displayUser={responseUser}
+            getFollowers={getFollowers}
+            getFollowing={getFollowing}
+            connection={connection}
+            setConnection={setConnection}
+          /><br/>
+        </>
+      )}
+      <PostList posts={posts} setPosts={setPosts} />
+    </div>
+  );
+};
 
 export default UserProfileComponent;

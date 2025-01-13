@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useUser } from "./components/UserContext";
+import banner from './images/banner.png';
 
 const Navbar = () => {
   const { user, clearUser } = useUser();
@@ -9,42 +10,48 @@ const Navbar = () => {
   }
 
   return (
-    <header className="flex py-3 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[65px] tracking-wide relative z-50">
+    <header className="flex py-3 px-4 sm:px-10 bg-white min-h-[65px] tracking-wide relative z-50">
       <div className="flex flex-wrap items-center gap-4 max-w-screen-xl mx-auto w-full">
-        {/* App Name as Logo Replacement */}
-        <h2 className="text-2xl font-bold">Clique</h2>
-
+      <Link 
+              to="/" 
+              >
+      <img
+          src={banner}
+          className="w-auto h-9"
+          alt="banner"
+        />
+     </Link>
         {/* Conditional Navigation Links for Logged-in Users */}
         {user && (
           <nav className="ml-auto flex gap-x-4">
             <Link 
               to="/" 
-              className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+               className="text-[#003a92] font-bold text-lg hover:underline"
             >
               Home
             </Link>
             <Link 
               to={`/user/${user.userId}`} 
-              className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+               className="text-[#003a92] font-bold text-lg hover:underline"
             >
               Profile
             </Link>
             <Link 
                 to="/search"
-                className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+                 className="text-[#003a92] font-bold text-lg hover:underline"
             >
               Search
             </Link>
             <Link 
                 to="/explore"
-                className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+                 className="text-[#003a92] font-bold text-lg hover:underline"
             >
               Explore
             </Link>
             {user.private && (
               <Link
                 to="/requests"
-                className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+                c className="text-[#003a92] font-bold text-lg hover:underline"
               >
                 Follow Requests
               </Link>
@@ -52,7 +59,7 @@ const Navbar = () => {
             <Link 
               to="/" 
               onClick={handleLogout}
-              className="lg:hover:text-[#007bff] text-gray-800 text-[15px]"
+               className="text-[#003a92] font-bold text-lg hover:underline"
             >
               Logout
             </Link>

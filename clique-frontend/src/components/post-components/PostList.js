@@ -6,7 +6,6 @@ import CommentList from './CommentList'
 import api from '../../service/api'
 
 const PostList = ({posts, setPosts}) => { 
-
   const {user, token} = useUser();
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -100,30 +99,32 @@ const PostList = ({posts, setPosts}) => {
 
   return (
     <>
-      {
-        posts.length > 0 ? (
-          posts.map((post) =>
-            <div key={post.postId}>
-              <PostComponent 
-                poster={post.username} 
-                createdAt={post.postedTime} 
-                content={post.postText}
-                onEditPost={post.username === user.username ? (newText) => handleUpdatePost(post.postId, newText) : null} 
-                onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
-              />
-              <LikeComponent count={post.likes} hasLiked={post.hasLiked} onLikeToggle={() => handleLikeToggle(post.postId, post.hasLiked)}/>
-              <CommentList 
-                comments={post.cdto} 
-                onAddComment={(commentText) => handleAddComment(post.postId, commentText)}
-                onDeleteComment={(commentId) => handleDeleteComment(post.postId, commentId)}
-                onEditComment={(commentId, newText) => handleEditComment(post.postId, commentId, newText)}
-              />
-            </div> 
-          )
-        ) : (
-          <p>No posts available</p>
-        )
-      }
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post.postId} className="bg-white p-4 shadow-md rounded-md mb-6">
+            <PostComponent 
+              poster={post.username} 
+              createdAt={post.postedTime} 
+              content={post.postText}
+              onEditPost={post.username === user.username ? (newText) => handleUpdatePost(post.postId, newText) : null} 
+              onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
+            />
+            <LikeComponent 
+              count={post.likes} 
+              hasLiked={post.hasLiked} 
+              onLikeToggle={() => handleLikeToggle(post.postId, post.hasLiked)}
+            />
+            <CommentList 
+              comments={post.cdto} 
+              onAddComment={(commentText) => handleAddComment(post.postId, commentText)}
+              onDeleteComment={(commentId) => handleDeleteComment(post.postId, commentId)}
+              onEditComment={(commentId, newText) => handleEditComment(post.postId, commentId, newText)}
+            />
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-600">No posts available</p>
+      )}
     </>
   )
 }

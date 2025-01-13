@@ -11,7 +11,6 @@ const CreatePost = ({addNewPost}) => {
 
     const createPost = async (postData) => {
         try {
-            //console.log(postData)
             const response = await api.post(`/posts`, postData, {headers})
             return response.data;
         } catch (err) {
@@ -37,27 +36,29 @@ const CreatePost = ({addNewPost}) => {
         }
     }
     return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <label
-                    htmlFor="message"
-                >
-                    Create Post
-                </label><br />
-                <textarea
-                    id="message"
-                    rows="4"
-                    value={postText}
-                    onChange={(e)=>setPostText(e.target.value)}
-                    placeholder="What's on your mind?"
-                ></textarea><br />
+        <div className="bg-white p-6 shadow-md rounded-md space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label htmlFor="message" className="text-gray-800 text-xs block mb-2">
+                        Create Post
+                    </label>
+                    <textarea
+                        id="message"
+                        rows="4"
+                        value={postText}
+                        onChange={(e)=>setPostText(e.target.value)}
+                        placeholder="What's on your mind?"
+                        className="w-full text-gray-800 text-sm border border-gray-300 focus:border-blue-600 p-2 outline-none rounded-md"
+                    ></textarea>
+                </div>
                 <button
                     type="submit"
+                    className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#002e74] hover:bg-[#004dbd] focus:outline-none"
                 >
                     Post
                 </button>
             </form>
-        </>
+        </div>
     )
 }
 

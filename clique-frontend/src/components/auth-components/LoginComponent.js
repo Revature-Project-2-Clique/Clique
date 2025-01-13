@@ -27,7 +27,6 @@ const LoginComponent = () => {
 
   return (
     <form onSubmit={handleLogin} className="mt-8 space-y-6">
-      <h3 className="text-gray-800 text-2xl font-bold">Sign In</h3>
       <div>
         <label htmlFor="username" className="text-gray-800 text-xs block mb-2">
           Username
@@ -38,8 +37,7 @@ const LoginComponent = () => {
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full text-gray-800 text-sm border-b border-gray-300
-                     focus:border-blue-600 pl-2 py-2 outline-none"
+          className="w-full text-gray-800 text-sm border-b border-gray-300 focus:border-blue-600 pl-2 py-2 outline-none"
         />
       </div>
       <div>
@@ -52,15 +50,12 @@ const LoginComponent = () => {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full text-gray-800 text-sm border-b border-gray-300
-                     focus:border-blue-600 pl-2 py-2 outline-none"
+          className="w-full text-gray-800 text-sm border-b border-gray-300 focus:border-blue-600 pl-2 py-2 outline-none"
         />
       </div>
       <button
         type="submit"
-        className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide
-                   rounded-md text-white bg-blue-600 hover:bg-blue-700
-                   focus:outline-none"
+        className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#002e74] hover:bg-[#004dbd] focus:outline-none"
       >
         Login
       </button>
