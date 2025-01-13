@@ -80,9 +80,7 @@ const ProfileManagement = () => {
   return (
     <div className="space-y-6">
       <br />
-      <br />
       <h2 className="text-2xl font-bold text-[#003a92]">Profile Management</h2>
-      <br />
       <div className="space-y-3">
         <button
           onClick={() => setCurrentForm("name")}
