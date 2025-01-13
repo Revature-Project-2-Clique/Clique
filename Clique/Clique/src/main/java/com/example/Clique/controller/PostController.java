@@ -1,11 +1,11 @@
 package com.example.Clique.controller;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Users;
@@ -30,16 +30,33 @@ public class PostController {
         return userService.getUserByUsername(username).getUserId();
     }
 
-    @PostMapping
-    private ResponseEntity<PostDTO> createPost(Authentication auth, @RequestBody Posts post) {
+
+    @PostMapping(consumes = {"multipart/form-data"})
+    private ResponseEntity<PostDTO> createPost(
+            Authentication auth,
+            @RequestParam("postText") String postText,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        
         Long userId = getUserId(auth);
-        PostDTO createdPost = postService.createPost(userId, post);
+        PostDTO createdPost = postService.createPost(userId, postText, image);
         return ResponseEntity.status(200).body(createdPost);
     }
 
-    @PatchMapping
-    private ResponseEntity<Posts> updatePost(Authentication auth, @RequestBody Posts post) {
-        return ResponseEntity.status(200).body(postService.updatePost(post));
+    @PatchMapping(consumes = {"multipart/form-data"})
+    private ResponseEntity<Posts> updatePost(
+            Authentication auth,
+            @RequestParam("postId") Long postId,
+            @RequestParam("postText") String postText,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        
+        getUserId(auth);
+        
+        Posts post = new Posts();
+        post.setPostId(postId);
+        post.setPostText(postText);
+        
+        Posts updatedPost = postService.updatePost(post, image);
+        return ResponseEntity.status(200).body(updatedPost);
     }
 
     @DeleteMapping("/{id}")
@@ -74,5 +91,4 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-
 }
