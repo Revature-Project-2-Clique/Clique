@@ -3,8 +3,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080'        //test locally
-   //baseURL: 'http://3.82.150.19:8080'    // test deployment
+    //baseURL: 'http://localhost:8080'        //test locally
+    baseURL: 'http://3.82.150.19:8080'    // test deployment
 })
 
 export default api;
