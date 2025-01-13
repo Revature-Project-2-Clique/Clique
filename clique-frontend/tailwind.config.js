@@ -4,7 +4,9 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
-    extend: {},
+    extend: {fontFamily: {
+      exo: ['"Exo"', 'sans-serif'],
+    },},
   },
   plugins: [],
 }

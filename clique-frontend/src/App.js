@@ -14,6 +14,7 @@ Modal.setAppElement("#root");
 function App() {
   return (
     <UserProvider>
+       <div className="font-exo">
       <Router>
           <div className="App">
             <Navbar/>
@@ -26,6 +27,7 @@ function App() {
             <Route path="/requests" element={<FollowRequestComponent />} />
           </Routes>
         </Router>
+        </div>
     </UserProvider>
   );
 }
