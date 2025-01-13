@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const PostComponent = ({poster, createdAt, content, onDeletePost, onEditPost}) => {
+const PostComponent = ({poster, userId, createdAt, content, onDeletePost, onEditPost}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(content);
 
@@ -14,7 +15,10 @@ const PostComponent = ({poster, createdAt, content, onDeletePost, onEditPost}) =
 
   return (
     <div className="mb-4">
+       <Link to={`/user/${userId}`} className="username-link">
       <h4 className="text-xl font-bold text-[#003a92]">{poster}</h4>
+      </Link>
+      {console.log(poster.id)}
       <small className="text-gray-600">{new Date(createdAt).toLocaleString()}</small>
       {!isEditing && onDeletePost && (
         <div className="space-x-2 mt-2">

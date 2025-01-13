@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDTO {
     private Long postId;
+    private Long userId; // Add this field
     private String username;
     private String postText;
     private LocalDateTime postedTime;

@@ -37,21 +37,24 @@ public class CommentService {
         comment.setCommentText(content);
         comment.setPostedTime(LocalDateTime.now());
         Comments c = commentRepository.save(comment);
-        Users u = userRepository.findById(c.getPosterId()).orElseThrow(() -> new RuntimeException("User not found"));
-        CommentDTO cdto = new CommentDTO(c.getCommentId(), c.getPostId(), u.getUsername(), c.getCommentText(), c.getPostedTime());
-        return cdto;
+    
+        Users u = userRepository.findById(c.getPosterId())
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        return new CommentDTO(c.getCommentId(), c.getPostId(), u.getUserId(), u.getUsername(), c.getCommentText(), c.getPostedTime());
     }
-
+    
     public Set<CommentDTO> getComments(Long postId) {
         List<Comments> commentList = commentRepository.findByPostId(postId);
         Set<CommentDTO> rv = new HashSet<>();
-        for (Comments c: commentList) {
-            Users u = userRepository.findById(c.getPosterId()).orElseThrow(() -> new RuntimeException("User not found"));
-            CommentDTO cdto = new CommentDTO(c.getCommentId(), c.getPostId(), u.getUsername(), c.getCommentText(), c.getPostedTime());
-            rv.add(cdto);
+        for (Comments c : commentList) {
+            Users u = userRepository.findById(c.getPosterId())
+                                    .orElseThrow(() -> new RuntimeException("User not found"));
+            rv.add(new CommentDTO(c.getCommentId(), c.getPostId(), u.getUserId(), u.getUsername(), c.getCommentText(), c.getPostedTime()));
         }
         return rv;
     }
+    
 
     public Comments updateComment(Long userId, Comments comment) {
         Comments c = commentRepository.findById(comment.getCommentId()).orElseThrow(() -> new RuntimeException("No such comment exists"));
