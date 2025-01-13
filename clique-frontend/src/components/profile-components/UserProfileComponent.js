@@ -83,6 +83,7 @@ const UserProfileComponent = () => {
     getPosts();
     getFollowers();
     getFollowing();
+    getConnectionStatus();
   }, [id, user]);
 
   useEffect(() => {
@@ -99,15 +100,13 @@ const UserProfileComponent = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto p-6 bg-white shadow-md rounded-md space-y-6">
-      <div>
         <h2 className="text-2xl font-bold text-[#003a92]">{responseUser.username}</h2>
-        <h3 className="text-lg text-gray-700">
-          {responseUser.firstName} {responseUser.lastName}
-        </h3>
-      </div>
-      <ConnectionDisplay followers={followers} following={following} />
+      
       {isCurrentUser ? (
         <>
+          <h3 className="text-lg text-gray-700">{responseUser.firstName} {responseUser.lastName}</h3>
+          <h3>Bio: {responseUser.bio}</h3>
+          <ConnectionDisplay followers={followers} following={following} />
           <button
             onClick={() => setVisible(true)}
             className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#002e74] hover:bg-[#004dbd] focus:outline-none"
@@ -115,7 +114,7 @@ const UserProfileComponent = () => {
             Profile Management
           </button>
           <Modal isOpen={visible}>
-          <div className="bg-[rgba(0,46,116,0.15)]flex items-center justify-center bg-opacity-15 z-50">
+          <div className="bg-[rgba(0,46,116,0.1)]flex items-center justify-center bg-opacity-15 z-50">
           <div className="w-[50vw] h-[75vh] mx-auto p-5 rounded-lg bg-white shadow-lg relative">
               <button
                 className="absolute top-10 left-10 text-[#b32525] font-bold text-lg hover:underline cursor-pointer focus:outline-none"
@@ -139,11 +138,13 @@ const UserProfileComponent = () => {
             connection={connection}
             setConnection={setConnection}
           /><br/>
-          <p>This user's profile is private, only approved followers can view their posts and personal details.</p>
+          <p>This user's profile is private, only approved followers can view their posts and profile information.</p>
         </>
       ) : (
         <>
+          <h3 className="text-lg text-gray-700">{responseUser.firstName} {responseUser.lastName}</h3>
           <h3>Bio: {responseUser.bio}</h3>
+          <ConnectionDisplay followers={followers} following={following} />
           <ConnectionManagement
             displayUser={responseUser}
             getFollowers={getFollowers}
