@@ -1,6 +1,8 @@
 package com.example.Clique.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -8,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,25 +48,39 @@ public class CommentServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // @Test
-    // void testCreateComment() {
-    //     Long userId = 1L;
-    //     Long postId = 1L;
-    //     String content = "This is a comment.";
+    @Test
+    void testCreateComment() {
+        Long userId = 1L;
+        Long postId = 10L;
+        String content = "This is a test comment";
 
-    //     Comments comment = new Comments();
-    //     comment.setPosterId(userId);
-    //     comment.setPostId(postId);
-    //     comment.setCommentText(content);
-    //     comment.setPostedTime(LocalDateTime.now());
+        Comments savedComment = new Comments();
+        savedComment.setCommentId(100L);
+        savedComment.setPosterId(userId);
+        savedComment.setPostId(postId);
+        savedComment.setCommentText(content);
+        savedComment.setPostedTime(LocalDateTime.now());
 
-    //     when(commentRepository.save(any(Comments.class))).thenReturn(comment);
+        Users user = new Users();
+        user.setUserId(userId);
+        user.setUsername("testUser");
 
-    //     commentService.createComment(userId, postId, content);
+        when(commentRepository.save(any(Comments.class))).thenReturn(savedComment);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-    //     //assertEquals("comment added", result);
-    //     verify(commentRepository, times(1)).save(any(Comments.class));
-    // }
+
+        CommentDTO result = commentService.createComment(userId, postId, content);
+
+        assertNotNull(result);
+        assertEquals(100L, result.getComment_id());
+        assertEquals("testUser", result.getUsername());
+        assertEquals("This is a test comment", result.getComment_text());
+
+        verify(commentRepository, times(1)).save(any(Comments.class));
+        verify(userRepository, times(1)).findById(userId);
+
+
+    }
 
     @Test
     void testGetComments() {
@@ -83,6 +100,8 @@ public class CommentServiceTest {
         comment2.setCommentText("Second comment");
         comment2.setPostedTime(LocalDateTime.now());
 
+        List<Comments> commentsList = Arrays.asList(comment1, comment2);
+
         Users user1 = new Users();
         user1.setUserId(1L);
         user1.setUsername("user1");
@@ -91,14 +110,20 @@ public class CommentServiceTest {
         user2.setUserId(2L);
         user2.setUsername("user2");
 
-        when(commentRepository.findByPostId(postId)).thenReturn(List.of(comment1, comment2));
+        when(commentRepository.findByPostId(postId)).thenReturn(commentsList);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
         when(userRepository.findById(2L)).thenReturn(Optional.of(user2));
 
-        Set<CommentDTO> comments = commentService.getComments(postId);
+        Set<CommentDTO> result = commentService.getComments(postId);
 
-        assertEquals(2, comments.size());
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(dto -> dto.getUsername().equals("user1")));
+        assertTrue(result.stream().anyMatch(dto -> dto.getUsername().equals("user2")));
+    
         verify(commentRepository, times(1)).findByPostId(postId);
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).findById(2L);
     }
 
     @Test

@@ -32,6 +32,13 @@ public class Posts {
         this.postText = postText;
     }
 
+    public Posts(long l, String string, long m, LocalDateTime now) {
+        this.postId = l;
+        this.postText = string;
+        this.posterId = m;
+        this.postedTime = now;
+    }
+    
     public Posts(Long postId, String postText) {
         this.postId = postId;
         this.postText = postText;
