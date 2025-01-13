@@ -110,21 +110,23 @@ public class PostService {
     }
 
     public PostDTO mapToPostDTO(Posts post, Long userId) {
-        Users u = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("User does not exist"));
-        Users poster = usersRepository.findById(post.getPosterId()).orElseThrow(() -> new RuntimeException("Poster does not exist"));
-        // if the logged in user whose id was passed to this method has reacted to this post or not
+        Users poster = usersRepository.findById(post.getPosterId())
+                                      .orElseThrow(() -> new RuntimeException("Poster does not exist"));
+    
         Optional<Reactions> reactions = reactionRepository.findByReactorIdAndPostId(userId, post.getPostId());
         Boolean hasLiked = reactions.isPresent();
         Set<CommentDTO> cdto = commentService.getComments(post.getPostId());
+    
         PostDTO pdto = new PostDTO();
         pdto.setPostId(post.getPostId());
+        pdto.setUserId(poster.getUserId());
         pdto.setUsername(poster.getUsername());
         pdto.setPostText(post.getPostText());
         pdto.setPostedTime(post.getPostedTime());
         pdto.setLikes(reactionRepository.countByPostId(post.getPostId()));
         pdto.setHasLiked(hasLiked);
         pdto.setCdto(cdto);
-
+    
         return pdto;
     }
 }

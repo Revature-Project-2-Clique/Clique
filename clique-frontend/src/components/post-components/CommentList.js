@@ -20,6 +20,7 @@ const CommentList = ({comments, onAddComment, onDeleteComment, onEditComment}) =
           <h6 className="text-sm font-medium text-gray-700 mb-2">Comments:</h6>
           {displayedComments.map((comment) => (
             <CommentComponent 
+              userId={comment.userId}
               key={comment.comment_id} 
               comment={comment} 
               onDelete={comment.username === user.username ? () => onDeleteComment(comment.comment_id) : null}

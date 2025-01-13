@@ -51,7 +51,7 @@ const Navbar = () => {
             {user.private && (
               <Link
                 to="/requests"
-                c className="text-[#003a92] font-bold text-lg hover:underline"
+                className="text-[#003a92] font-bold text-lg hover:underline"
               >
                 Follow Requests
               </Link>

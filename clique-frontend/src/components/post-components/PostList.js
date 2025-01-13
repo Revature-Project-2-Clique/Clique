@@ -102,7 +102,9 @@ const PostList = ({posts, setPosts}) => {
       {posts.length > 0 ? (
         posts.map((post) => (
           <div key={post.postId} className="bg-white p-4 shadow-md rounded-md mb-6">
+            {console.log(post)}
             <PostComponent 
+              userId={post.userId}
               poster={post.username} 
               createdAt={post.postedTime} 
               content={post.postText}

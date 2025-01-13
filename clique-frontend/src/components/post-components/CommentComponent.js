@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const CommentComponent = ({comment, onDelete, onEdit}) => {
+const CommentComponent = ({comment, userId, onDelete, onEdit}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(comment.comment_text);
 
@@ -14,7 +15,9 @@ const CommentComponent = ({comment, onDelete, onEdit}) => {
 
   return (
     <div className="border-b border-gray-100 pb-2 mb-2">
+      <Link to={`/user/${userId}`} className="username-link">
       <p><strong className="text-sm text-[#003a92]">{comment.username}</strong></p>
+      </Link>
       <p><small className="text-xs text-gray-500">{new Date(comment.posted_Time).toLocaleString()}</small></p>
       {isEditing ? (
         <div className="space-y-2 mt-2">
