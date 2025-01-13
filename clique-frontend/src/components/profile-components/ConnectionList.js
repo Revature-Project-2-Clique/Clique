@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 const ConnectionList = ({ connections, title, onLinkClick }) => {
   return (
     <>
-      <h2>{title}</h2>
       <br/>
+      <h2 className="text-2xl font-bold text-[#003a92]">{title}</h2><br/>
       {connections.length > 0 ? (
         <>
           {connections.map((connection) => (
             <div key={connection.userId}>
               <Link 
+                className="text-sm text-[#003a92] font-bold hover:underline"
                 to={`/user/${connection.userId}`}
                 onClick={onLinkClick}
               >

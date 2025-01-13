@@ -115,11 +115,20 @@ const UserProfileComponent = () => {
             Profile Management
           </button>
           <Modal isOpen={visible}>
-            <div className="font-exo">
-              <button onClick={() => setVisible(false)}>Close</button>
-              <ProfileManagement />
+          <div className="bg-[rgba(0,46,116,0.15)]flex items-center justify-center bg-opacity-15 z-50">
+          <div className="w-[50vw] h-[75vh] mx-auto p-5 rounded-lg bg-white shadow-lg relative">
+              <button
+                className="absolute top-10 left-10 text-[#b32525] font-bold text-lg hover:underline cursor-pointer focus:outline-none"
+                onClick={() => setVisible(false)}>X</button><br/>
+              <div className="flex flex-col items-center h-full">
+                <div className="font-exo">
+                  <ProfileManagement />
+                </div>
+              </div>
+              </div>
             </div>
           </Modal>
+          <PostList posts={posts} setPosts={setPosts} />
         </>
       ) : hideContent ? (
         <>
@@ -142,9 +151,10 @@ const UserProfileComponent = () => {
             connection={connection}
             setConnection={setConnection}
           /><br/>
+          <PostList posts={posts} setPosts={setPosts} />
         </>
       )}
-      <PostList posts={posts} setPosts={setPosts} />
+      
     </div>
   );
 };
