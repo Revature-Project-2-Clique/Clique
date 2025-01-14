@@ -13,10 +13,12 @@ import com.example.Clique.Entities.Posts;
 @Repository
 public interface PostRepository extends JpaRepository<Posts, Long> {
 
-    List<Posts> findAllByPosterId(Long posterId);
+    List<Posts> findAllByPosterIdOrderByPostIdDesc(Long posterId);
 
     @Query("SELECT p FROM Posts p WHERE LOWER(p.postText) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Posts> searchByContent(@Param("query") String query);
 
     Optional<List<Posts>> findByPosterIdInOrderByPostIdDesc(List<Long> posterIds);
+
+    List<Posts> findAllByOrderByPostIdDesc();
 }

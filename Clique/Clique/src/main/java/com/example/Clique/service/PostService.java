@@ -135,12 +135,12 @@ public class PostService {
     }
 
     public List<Posts> getPostsByUsername(Long userId, Users username) {
-        return (List<Posts>) postRepository.findAllByPosterId(userId);
+        return (List<Posts>) postRepository.findAllByPosterIdOrderByPostIdDesc(userId);
     }
 
     public List<PostDTO> getPostsByPosterId(Long posterId) {
         List<PostDTO> dtos = new ArrayList<>();
-        List<Posts> posts = postRepository.findAllByPosterId(posterId);
+        List<Posts> posts = postRepository.findAllByPosterIdOrderByPostIdDesc(posterId);
         for (Posts post : posts) {
             dtos.add(mapToPostDTO(post, posterId));
         }
@@ -162,7 +162,7 @@ public class PostService {
 
     public List<PostDTO> getExploreFeed(Long userId) {
         List<PostDTO> rv = new ArrayList<>();
-        List<Posts> posts = postRepository.findAll();
+        List<Posts> posts = postRepository.findAllByOrderByPostIdDesc();
         for (Posts p : posts) {
             rv.add(mapToPostDTO(p, userId));
         }

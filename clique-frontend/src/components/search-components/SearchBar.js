@@ -111,7 +111,7 @@ function SearchBar() {
                 {loadingPosts ? (
                     <p className="text-gray-600">Loading posts...</p>
                 ) : (
-                    <PostList posts={posts}/>
+                    <PostList posts={posts} setPosts={setPosts}/>
                 )}
             </div>
         </div>
