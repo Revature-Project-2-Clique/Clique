@@ -109,6 +109,7 @@ const PostList = ({posts, setPosts}) => {
               content={post.postText}
               onEditPost={post.username === user.username ? (newText) => handleUpdatePost(post.postId, newText) : null} 
               onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
+              imageUrl={post.imageUrl}
             />
             <LikeComponent 
               count={post.likes} 

@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import { useUser } from '../UserContext';
 import api from '../../service/api';
 
-const CreatePost = ({addNewPost}) => {
-
-    const {user, token} = useUser();
+const CreatePost = ({ addNewPost }) => {
+    const { user, token } = useUser();
     const [postText, setPostText] = useState("");
+    const [image, setImage] = useState(null);
 
-    const headers = token ? { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" } : {};
+    // Remove "Content-Type" header for multipart/form-data; let the browser set it.
+    const headers = token ? { "Authorization": `Bearer ${token}` } : {};
 
-    const createPost = async (postData) => {
+    const createPost = async (formData) => {
         try {
-            const response = await api.post(`/posts`, postData, {headers})
+            const response = await api.post(`/posts`, formData, { headers });
             return response.data;
         } catch (err) {
-            console.error("Error creating post", err)
+            console.error("Error creating post", err);
         }
     }
 
@@ -24,20 +25,30 @@ const CreatePost = ({addNewPost}) => {
             alert("Empty post");
             return;
         }
-        try{
-            const postData = {postText};
-            const newPost = await createPost(postData);
+        try {
+            const formData = new FormData();
+            formData.append('postText', postText);
+            if(image) {
+                formData.append('image', image);
+            }
+
+            const newPost = await createPost(formData);
             addNewPost(newPost);
             setPostText("");
-
-        }catch(err) {
+            setImage(null);
+        } catch(err) {
             console.log(err);
             alert("Cannot create Post");
         }
     }
+
     return (
         <div className="bg-white p-6 shadow-md rounded-md space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form 
+                onSubmit={handleSubmit} 
+                className="space-y-4" 
+                encType="multipart/form-data"
+            >
                 <div>
                     <label htmlFor="message" className="text-gray-800 text-xs block mb-2">
                         Create Post
@@ -46,10 +57,21 @@ const CreatePost = ({addNewPost}) => {
                         id="message"
                         rows="4"
                         value={postText}
-                        onChange={(e)=>setPostText(e.target.value)}
+                        onChange={(e) => setPostText(e.target.value)}
                         placeholder="What's on your mind?"
                         className="w-full text-gray-800 text-sm border border-gray-300 focus:border-blue-600 p-2 outline-none rounded-md"
                     ></textarea>
+                </div>
+                <div>
+                    <label htmlFor="image" className="text-gray-800 text-xs block mb-2">
+                        Upload Image (optional)
+                    </label>
+                    <input 
+                        type="file" 
+                        id="image"
+                        accept="image/*" 
+                        onChange={(e) => setImage(e.target.files[0])}
+                    />
                 </div>
                 <button
                     type="submit"
@@ -62,4 +84,4 @@ const CreatePost = ({addNewPost}) => {
     )
 }
 
-export default CreatePost
+export default CreatePost;

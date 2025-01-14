@@ -28,6 +28,8 @@ public class Posts {
 
     private LocalDateTime postedTime;
 
+    private String imageUrl;
+
     public Posts(String postText) {
         this.postText = postText;
     }
