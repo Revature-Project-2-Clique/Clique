@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDTO {
     private Long postId;
-    private Long userId; // Add this field
+    private Long userId; 
     private String username;
     private String postText;
     private LocalDateTime postedTime;
     private Boolean hasLiked;
     private Long likes;
     private Set<CommentDTO> cdto;
+    private String imageUrl;
 }

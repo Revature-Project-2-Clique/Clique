@@ -18,7 +18,6 @@ const RegisterComponent = () => {
     api
       .post("/auth/register", userData)
       .then((res) => {
-        console.log(res.data);
         alert("Registration successful!");
       })
       .catch((error) => {

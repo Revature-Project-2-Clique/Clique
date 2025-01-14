@@ -1,13 +1,23 @@
 package com.example.Clique.service;
 
+import java.io.InputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Reactions;
@@ -29,7 +39,15 @@ public class PostService {
     private CommentService commentService;
 
     @Autowired
-    public PostService(UsersRepository usersRepository, PostRepository postRepository, ConnectionRepository connectionRepository, CommentService commentService, ReactionRepository reactionRepository){
+    private AmazonS3 amazonS3;
+
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
+
+    @Autowired
+    public PostService(UsersRepository usersRepository, PostRepository postRepository, 
+                       ConnectionRepository connectionRepository, 
+                       CommentService commentService, ReactionRepository reactionRepository) {
         this.usersRepository = usersRepository;
         this.postRepository = postRepository;
         this.connectionRepository = connectionRepository;
@@ -37,31 +55,73 @@ public class PostService {
         this.reactionRepository = reactionRepository;
     }
 
-    public PostDTO createPost(Long userId, Posts post) {
-        if (post.getPostText().isEmpty() || post.getPostText().length() > 255) {
+    public PostDTO createPost(Long userId, String postText, MultipartFile image) {
+        if (postText == null || postText.isEmpty() || postText.length() > 255) {
             return null;
         }
-        if (usersRepository.findById(userId).isEmpty()) {
+        Optional<Users> userOptional = usersRepository.findById(userId);
+        if(userOptional.isEmpty()) {
             return null;
         }
+
+        Posts post = new Posts();
+        post.setPostText(postText);
         post.setPosterId(userId);
         post.setPostedTime(LocalDateTime.now());
-        Posts rv = postRepository.save(post);
-        return mapToPostDTO(rv, userId);
+
+        if(image != null && !image.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(image.getSize());
+                metadata.setContentType(image.getContentType());
+
+                InputStream inputStream = image.getInputStream();
+                amazonS3.putObject(
+                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead)
+                );
+                String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
+                post.setImageUrl(imageUrl);
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Posts savedPost = postRepository.save(post);
+        return mapToPostDTO(savedPost, userId);
     }
 
-    public Posts updatePost(Posts post) {
+    public Posts updatePost(Posts post, MultipartFile image) {
         Optional<Posts> postOptional = postRepository.findById(post.getPostId());
-        Posts rv = null;
-        if (postOptional.isPresent()) {
-            Posts p = postOptional.get();
-            p.setPostText(post.getPostText());
-            p.setPostedTime(LocalDateTime.now());
-            rv = postRepository.save(p);
-        } else {
+        if (!postOptional.isPresent()) {
             throw new RuntimeException("No such post exist");
         }
-        return rv;
+
+        Posts p = postOptional.get();
+        p.setPostText(post.getPostText());
+        p.setPostedTime(LocalDateTime.now());
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(image.getSize());
+                metadata.setContentType(image.getContentType());
+
+                InputStream inputStream = image.getInputStream();
+                amazonS3.putObject(
+                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead)
+                );
+                String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
+                p.setImageUrl(imageUrl);
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return postRepository.save(p);
     }
 
     public String deletePost(Long postId) {
@@ -91,10 +151,12 @@ public class PostService {
 
     public List<PostDTO> getUserFeed(Long userId) {
         List<PostDTO> rv = new ArrayList<>();
-        List<Long> posterIds = connectionRepository.findFollowingIdsByFollowerId(userId).orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
+        List<Long> posterIds = connectionRepository.findFollowingIdsByFollowerId(userId)
+            .orElseThrow(() -> new RuntimeException("User with id " + userId + " does not exist"));
         posterIds.add(userId);
-        List<Posts> posts = postRepository.findByPosterIdInOrderByPostIdDesc(posterIds).orElseThrow(() -> new RuntimeException("Error getting posts"));
-        for (Posts p: posts) {
+        List<Posts> posts = postRepository.findByPosterIdInOrderByPostIdDesc(posterIds)
+            .orElseThrow(() -> new RuntimeException("Error getting posts"));
+        for (Posts p : posts) {
             rv.add(mapToPostDTO(p, userId));
         }
         return rv;
@@ -103,7 +165,7 @@ public class PostService {
     public List<PostDTO> getExploreFeed(Long userId) {
         List<PostDTO> rv = new ArrayList<>();
         List<Posts> posts = postRepository.findAll();
-        for (Posts p: posts) {
+        for (Posts p : posts) {
             rv.add(mapToPostDTO(p, userId));
         }
         return rv;
@@ -126,7 +188,7 @@ public class PostService {
         pdto.setLikes(reactionRepository.countByPostId(post.getPostId()));
         pdto.setHasLiked(hasLiked);
         pdto.setCdto(cdto);
-    
+        pdto.setImageUrl(post.getImageUrl());
         return pdto;
     }
 }
