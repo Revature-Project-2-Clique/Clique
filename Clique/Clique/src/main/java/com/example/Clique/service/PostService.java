@@ -79,7 +79,6 @@ public class PostService {
                 InputStream inputStream = image.getInputStream();
                 amazonS3.putObject(
                     new PutObjectRequest(bucketName, fileName, inputStream, metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)
                 );
                 String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
                 post.setImageUrl(imageUrl);
@@ -112,7 +111,6 @@ public class PostService {
                 InputStream inputStream = image.getInputStream();
                 amazonS3.putObject(
                     new PutObjectRequest(bucketName, fileName, inputStream, metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)
                 );
                 String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
                 p.setImageUrl(imageUrl);
