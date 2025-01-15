@@ -19,8 +19,17 @@ import com.example.Clique.Entities.Users;
 import com.example.Clique.repository.UsersRepository;
 import com.example.Clique.security.JwtUtil;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
+import java.util.UUID;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class UserService {
@@ -30,6 +39,12 @@ public class UserService {
     private final UsersRepository usersRepository;
 
     private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    private AmazonS3 amazonS3;
+
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
 
     @Autowired
     public UserService(JwtUtil jwtUtil, UsersRepository usersRepository, AuthenticationManager authenticationManager) {
@@ -47,7 +62,7 @@ public class UserService {
 
     public String loginUser(Users user) throws AuthenticationException {
         if (user.getUsername() == null || user.getPassword() == null ||
-                user.getUsername().isEmpty() || user.getPassword().isEmpty()) {
+            user.getUsername().isEmpty() || user.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Invalid username or password");
         }
         try {
@@ -58,7 +73,7 @@ public class UserService {
         }
     }
 
-    public Users getUserByUsername(String username) {
+     public Users getUserByUsername(String username) {
         return usersRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Username does not exist"));
     }
 
@@ -101,8 +116,8 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
     }
-
-
+    
+    
     public UsersDTO mapToDTO(Users user) {
         UsersDTO dto = new UsersDTO();
         dto.setFirstName(user.getFirstName());
@@ -111,6 +126,7 @@ public class UserService {
         dto.setUserId(user.getUserId());
         dto.setBio(user.getBio());
         dto.setPrivate(user.getIsPrivate());
+        dto.setProfilePictureUrl(user.getProfilePictureUrl());
         return dto;
     }
 
@@ -139,5 +155,30 @@ public class UserService {
             return "Visibility updated";
         }
         throw new RuntimeException("User not found");
+    }
+
+    public UsersDTO updateProfilePicture(Long userId, MultipartFile file) {
+        Users user = usersRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(file.getSize());
+                metadata.setContentType(file.getContentType());
+
+                InputStream inputStream = file.getInputStream();
+                amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata));
+                
+                String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
+                user.setProfilePictureUrl(imageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading profile picture to S3", e);
+            }
+        }
+
+        usersRepository.save(user);
+        return mapToDTO(user);
     }
 }

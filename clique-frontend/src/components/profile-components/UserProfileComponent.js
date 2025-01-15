@@ -100,8 +100,23 @@ const UserProfileComponent = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto p-6 bg-white shadow-md rounded-md space-y-6">
-        <h2 className="text-2xl font-bold text-[#003a92]">{responseUser.username}</h2>
-      
+      <div className="flex items-center space-x-4">
+        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-300">
+          <img
+            src={
+              responseUser.profilePictureUrl
+                ? responseUser.profilePictureUrl
+                : "https://via.placeholder.com/150?text=Profile"
+            }
+            alt="Profile"
+            className="object-cover w-full h-full"
+          />
+        </div>
+        <h2 className="text-2xl font-bold text-[#003a92]">
+          {responseUser.username}
+        </h2>
+      </div>
+
       {isCurrentUser ? (
         <>
           <h3 className="text-lg text-gray-700">{responseUser.firstName} {responseUser.lastName}</h3>
@@ -114,16 +129,16 @@ const UserProfileComponent = () => {
             Profile Management
           </button>
           <Modal isOpen={visible}>
-          <div className="bg-[rgba(0,46,116,0.1)]flex items-center justify-center bg-opacity-15 z-50">
-          <div className="w-[50vw] h-[75vh] mx-auto p-5 rounded-lg bg-white shadow-lg relative">
-              <button
-                className="absolute top-10 left-10 text-[#b32525] font-bold text-lg hover:underline cursor-pointer focus:outline-none"
-                onClick={() => setVisible(false)}>X</button><br/>
+            <div className="bg-[rgba(0,46,116,0.1)]flex items-center justify-center bg-opacity-15 z-50">
+              <div className="w-[50vw] h-[75vh] mx-auto p-5 rounded-lg bg-white shadow-lg relative">
+                <button
+                  className="absolute top-10 left-10 text-[#b32525] font-bold text-lg hover:underline cursor-pointer focus:outline-none"
+                  onClick={() => setVisible(false)}>X</button><br/>
               <div className="flex flex-col items-center h-full">
-                <div className="font-exo">
-                  <ProfileManagement />
+                  <div className="font-exo">
+                    <ProfileManagement />
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </Modal>
@@ -137,9 +152,9 @@ const UserProfileComponent = () => {
             getFollowing={getFollowing}
             connection={connection}
             setConnection={setConnection}
-          /><br/>
-          <p>This user's profile is private, only approved followers can view their posts and profile information.</p>
-        </>
+            /><br/>
+            <p>This user's profile is private, only approved followers can view their posts and profile information.</p>
+          </>
       ) : (
         <>
           <h3 className="text-lg text-gray-700">{responseUser.firstName} {responseUser.lastName}</h3>
@@ -155,7 +170,7 @@ const UserProfileComponent = () => {
           <PostList posts={posts} setPosts={setPosts} />
         </>
       )}
-      
+
     </div>
   );
 };

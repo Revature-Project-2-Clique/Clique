@@ -3,6 +3,7 @@ import { useUser } from "../UserContext";
 import ChangeName from "./ChangeName";
 import ChangePassword from "./ChangePassword";
 import ChangeBio from "./ChangeBio";
+import ChangeProfilePicture from "./ChangeProfilePicture";
 import api from "../../service/api";
 import axios from "axios";
 import ChangePrivacy from "./ChangePrivacy";
@@ -106,6 +107,12 @@ const ProfileManagement = () => {
         >
           Update Bio
         </button>
+        <button
+          onClick={() => setCurrentForm("profilePic")}
+          className="block text-[#003a92] font-bold text-lg hover:underline cursor-pointer focus:outline-none"
+        >
+          Upload Profile Picture
+        </button>
       </div>
       <br />
       {currentForm === "name" && (
@@ -134,6 +141,9 @@ const ProfileManagement = () => {
       )}
       {currentForm === "bio" && (
         <ChangeBio setBios={setBios} bioSubmitHandler={bioSubmitHandler} />
+      )}
+      {currentForm === "profilePic" && (
+        <ChangeProfilePicture updateUser={updateUser} />
       )}
     </div>
   );

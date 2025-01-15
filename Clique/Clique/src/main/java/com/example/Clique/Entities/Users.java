@@ -29,6 +29,9 @@ public class Users {
 
     private boolean isPrivate = false; // Profiles are public by default
 
+    @Column(nullable = true)
+    private String profilePictureUrl;
+
     @Column(unique = true)
     private String username;
 

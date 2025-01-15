@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
@@ -75,7 +76,24 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/profile-picture", consumes = {"multipart/form-data"})
+    public ResponseEntity<UsersDTO> updateProfilePicture(
+            Authentication auth, 
+            @RequestParam("profilePicture") MultipartFile file) {
+        try {
+            if (file == null || file.isEmpty()) {
+                System.out.println("No file received or file is empty.");
+            } else {
+                System.out.println("Received file: " + file.getOriginalFilename() + 
+                                   ", Size: " + file.getSize());
+            }
+            Long userId = getUserId(auth);
+            UsersDTO updated = userService.updateProfilePicture(userId, file);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();  // Print stack trace to server logs
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
     
-
-
 }
