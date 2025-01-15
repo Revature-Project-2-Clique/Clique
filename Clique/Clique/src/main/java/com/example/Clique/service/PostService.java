@@ -94,6 +94,7 @@ public class PostService {
                 metadata.setContentType(video.getContentType());
 
                 InputStream inputStream = video.getInputStream();
+                System.out.println("Uploading video: " + fileName);
                 amazonS3.putObject(
                     new PutObjectRequest(bucketName, fileName, inputStream, metadata)
                 );
@@ -223,6 +224,7 @@ public class PostService {
         pdto.setHasLiked(hasLiked);
         pdto.setCdto(cdto);
         pdto.setImageUrl(post.getImageUrl());
+        pdto.setVideoUrl(post.getVideoUrl());
         return pdto;
     }
 }
