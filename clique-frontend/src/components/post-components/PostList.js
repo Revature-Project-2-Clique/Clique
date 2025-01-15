@@ -80,7 +80,7 @@ const PostList = ({posts, setPosts}) => {
 
   const handleEditComment = async (postId, commentId, newText) => {
     try {
-      const response = await api.patch(`comments/update/${commentId}`,{commentId: commentId, postId: postId, commentText: newText}, {headers});
+      const response = await api.patch(`/comments/update/${commentId}`,{commentId: commentId, postId: postId, commentText: newText}, {headers});
       const updatedComment = response.data;
       const updatedPosts = posts.map((post) =>
         post.postId === postId
@@ -110,6 +110,7 @@ const PostList = ({posts, setPosts}) => {
               onEditPost={post.username === user.username ? (newText) => handleUpdatePost(post.postId, newText) : null} 
               onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
               imageUrl={post.imageUrl}
+              videoUrl={post.videoUrl}
             />
             <LikeComponent 
               count={post.likes} 
@@ -131,4 +132,4 @@ const PostList = ({posts, setPosts}) => {
   )
 }
 
-export default PostList
+export default PostList;

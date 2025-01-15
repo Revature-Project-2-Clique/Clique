@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 import com.example.Clique.Entities.Posts;
 import com.example.Clique.Entities.Reactions;
@@ -55,7 +54,7 @@ public class PostService {
         this.reactionRepository = reactionRepository;
     }
 
-    public PostDTO createPost(Long userId, String postText, MultipartFile image) {
+    public PostDTO createPost(Long userId, String postText, MultipartFile image, MultipartFile video) {
         if (postText == null || postText.isEmpty() || postText.length() > 255) {
             return null;
         }
@@ -87,11 +86,29 @@ public class PostService {
             }
         }
 
+        if(video != null && !video.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + video.getOriginalFilename();
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(video.getSize());
+                metadata.setContentType(video.getContentType());
+
+                InputStream inputStream = video.getInputStream();
+                amazonS3.putObject(
+                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
+                );
+                String videoUrl = amazonS3.getUrl(bucketName, fileName).toString();
+                post.setVideoUrl(videoUrl);
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         Posts savedPost = postRepository.save(post);
         return mapToPostDTO(savedPost, userId);
     }
 
-    public Posts updatePost(Posts post, MultipartFile image) {
+    public Posts updatePost(Posts post, MultipartFile image, MultipartFile video) {
         Optional<Posts> postOptional = postRepository.findById(post.getPostId());
         if (!postOptional.isPresent()) {
             throw new RuntimeException("No such post exist");
@@ -119,8 +136,27 @@ public class PostService {
             }
         }
 
+        if(video != null && !video.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + video.getOriginalFilename();
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(video.getSize());
+                metadata.setContentType(video.getContentType());
+
+                InputStream inputStream = video.getInputStream();
+                amazonS3.putObject(
+                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
+                );
+                String videoUrl = amazonS3.getUrl(bucketName, fileName).toString();
+                p.setVideoUrl(videoUrl);
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return postRepository.save(p);
     }
+
 
     public String deletePost(Long postId) {
         if (postRepository.existsById(postId)) {

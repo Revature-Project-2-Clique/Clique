@@ -5,9 +5,8 @@ import api from '../../service/api';
 const CreatePost = ({ addNewPost }) => {
     const { user, token } = useUser();
     const [postText, setPostText] = useState("");
-    const [image, setImage] = useState(null);
+    const [file, setFile] = useState(null);
 
-    // Remove "Content-Type" header for multipart/form-data; let the browser set it.
     const headers = token ? { "Authorization": `Bearer ${token}` } : {};
 
     const createPost = async (formData) => {
@@ -28,14 +27,19 @@ const CreatePost = ({ addNewPost }) => {
         try {
             const formData = new FormData();
             formData.append('postText', postText);
-            if(image) {
-                formData.append('image', image);
+            if(file) {
+                if(file.type.startsWith('image')) {
+                    formData.append('image', file);
+                } else if(file.type.startsWith('video')) {
+                    formData.append('video', file);
+                }
             }
 
             const newPost = await createPost(formData);
             addNewPost(newPost);
             setPostText("");
-            setImage(null);
+            setFile(null);
+            e.target.reset();
         } catch(err) {
             console.log(err);
             alert("Cannot create Post");
@@ -63,14 +67,14 @@ const CreatePost = ({ addNewPost }) => {
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="image" className="text-gray-800 text-xs block mb-2">
-                        Upload Image (optional)
+                    <label htmlFor="file" className="text-gray-800 text-xs block mb-2">
+                        Upload Image or Video (optional)
                     </label>
                     <input 
                         type="file" 
-                        id="image"
-                        accept="image/*" 
-                        onChange={(e) => setImage(e.target.files[0])}
+                        id="file"
+                        accept="image/*,video/*" 
+                        onChange={(e) => setFile(e.target.files[0])}
                     />
                 </div>
                 <button

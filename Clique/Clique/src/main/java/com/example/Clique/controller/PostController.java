@@ -35,10 +35,11 @@ public class PostController {
     private ResponseEntity<PostDTO> createPost(
             Authentication auth,
             @RequestParam("postText") String postText,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "video", required = false) MultipartFile video) {
         
         Long userId = getUserId(auth);
-        PostDTO createdPost = postService.createPost(userId, postText, image);
+        PostDTO createdPost = postService.createPost(userId, postText, image, video);
         return ResponseEntity.status(200).body(createdPost);
     }
 
@@ -47,7 +48,8 @@ public class PostController {
             Authentication auth,
             @RequestParam("postId") Long postId,
             @RequestParam("postText") String postText,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "video", required = false) MultipartFile video) {
         
         getUserId(auth);
         
@@ -55,7 +57,7 @@ public class PostController {
         post.setPostId(postId);
         post.setPostText(postText);
         
-        Posts updatedPost = postService.updatePost(post, image);
+        Posts updatedPost = postService.updatePost(post, image, video);
         return ResponseEntity.status(200).body(updatedPost);
     }
 

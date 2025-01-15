@@ -29,6 +29,8 @@ public class Posts {
     private LocalDateTime postedTime;
 
     private String imageUrl;
+    
+    private String videoUrl;
 
     public Posts(String postText) {
         this.postText = postText;

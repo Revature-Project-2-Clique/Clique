@@ -20,4 +20,5 @@ public class PostDTO {
     private Long likes;
     private Set<CommentDTO> cdto;
     private String imageUrl;
+    private String videoUrl;
 }
