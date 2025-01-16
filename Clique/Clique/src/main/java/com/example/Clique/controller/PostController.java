@@ -43,22 +43,9 @@ public class PostController {
         return ResponseEntity.status(200).body(createdPost);
     }
 
-    @PatchMapping(consumes = {"multipart/form-data"})
-    private ResponseEntity<Posts> updatePost(
-            Authentication auth,
-            @RequestParam("postId") Long postId,
-            @RequestParam("postText") String postText,
-            @RequestParam(value = "image", required = false) MultipartFile image,
-            @RequestParam(value = "video", required = false) MultipartFile video) {
-        
-        getUserId(auth);
-        
-        Posts post = new Posts();
-        post.setPostId(postId);
-        post.setPostText(postText);
-        
-        Posts updatedPost = postService.updatePost(post, image, video);
-        return ResponseEntity.status(200).body(updatedPost);
+    @PatchMapping
+    private ResponseEntity<Posts> updatePost(Authentication auth, @RequestBody Posts post) {
+        return ResponseEntity.status(200).body(postService.updatePost(post));
     }
 
     @DeleteMapping("/{id}")

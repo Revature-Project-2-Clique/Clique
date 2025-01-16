@@ -109,7 +109,7 @@ public class PostService {
         return mapToPostDTO(savedPost, userId);
     }
 
-    public Posts updatePost(Posts post, MultipartFile image, MultipartFile video) {
+    public Posts updatePost(Posts post) {
         Optional<Posts> postOptional = postRepository.findById(post.getPostId());
         if (!postOptional.isPresent()) {
             throw new RuntimeException("No such post exist");
@@ -118,43 +118,6 @@ public class PostService {
         Posts p = postOptional.get();
         p.setPostText(post.getPostText());
         p.setPostedTime(LocalDateTime.now());
-
-        if (image != null && !image.isEmpty()) {
-            try {
-                String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentLength(image.getSize());
-                metadata.setContentType(image.getContentType());
-
-                InputStream inputStream = image.getInputStream();
-                amazonS3.putObject(
-                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
-                );
-                String imageUrl = amazonS3.getUrl(bucketName, fileName).toString();
-                p.setImageUrl(imageUrl);
-            } catch(IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        if(video != null && !video.isEmpty()) {
-            try {
-                String fileName = UUID.randomUUID().toString() + "_" + video.getOriginalFilename();
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentLength(video.getSize());
-                metadata.setContentType(video.getContentType());
-
-                InputStream inputStream = video.getInputStream();
-                amazonS3.putObject(
-                    new PutObjectRequest(bucketName, fileName, inputStream, metadata)
-                );
-                String videoUrl = amazonS3.getUrl(bucketName, fileName).toString();
-                p.setVideoUrl(videoUrl);
-            } catch(IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         return postRepository.save(p);
     }
 
