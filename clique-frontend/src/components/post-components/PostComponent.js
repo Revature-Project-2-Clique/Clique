@@ -29,7 +29,7 @@ const PostComponent = ({
       <Link to={`/user/${userId}`} className="username-link">
         <div className="flex items-center space-x-2">
           <img 
-            src={profilePhotoUrl} 
+            src={profilePhotoUrl || 'https://example.com/default-profile.jpg'} 
             alt={`${poster}'s profile`} 
             className="w-8 h-8 rounded-full object-cover"
           />
@@ -55,7 +55,7 @@ const PostComponent = ({
       )}
       <hr className="my-2"/>
       <div 
-        className={`media-container mb-2 w-full max-w-md aspect-square rounded-md flex items-center justify-center overflow-hidden ${
+        className={`media-container mb-2 w-full max-w-md h-64 rounded-md flex items-center justify-center overflow-hidden ${
           hasMedia ? 'bg-white' : 'bg-gray-100'
         } shadow-md`}
       >

@@ -2,6 +2,7 @@ package com.example.Clique.controller;
 
 import java.util.List;
 
+import com.example.Clique.dto.PostDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -45,13 +46,14 @@ public class SearchController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<?> searchPosts(@RequestParam String query) {
+    public ResponseEntity<?> searchPosts(Authentication auth, @RequestParam String query) {
+        Long userId = getUserId(auth);
         try {
             //System.out.printf("------------------------------------------------ ", query);
             if (query == null || query.trim().isEmpty()) {
                 throw new IllegalArgumentException("Query parameter cannot be empty.");
             }
-            List<PostSearchDTO> posts = searchService.searchPosts(query);
+            List<PostDTO> posts = searchService.searchPosts(query, userId);
             return ResponseEntity.ok(posts);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
