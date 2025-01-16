@@ -14,6 +14,7 @@ public class PostDTO {
     private Long postId;
     private Long userId; 
     private String username;
+    private String profilePictureUrl;  
     private String postText;
     private LocalDateTime postedTime;
     private Boolean hasLiked;
