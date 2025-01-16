@@ -24,14 +24,15 @@ const CreatePost = ({ addNewPost }) => {
             alert("Empty post");
             return;
         }
+        console.log("File before submission:", file);
         try {
             const formData = new FormData();
             formData.append('postText', postText);
             if(file) {
-                if(file.type.startsWith('image')) {
-                    formData.append('image', file);
-                } else if(file.type.startsWith('video')) {
+                if(file.type.startsWith('video')) {
                     formData.append('video', file);
+                } else if(file.type.startsWith('image')) {
+                    formData.append('image', file);
                 }
             }
 
