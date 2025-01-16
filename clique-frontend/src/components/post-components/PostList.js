@@ -111,7 +111,7 @@ const PostList = ({posts, setPosts}) => {
               onDeletePost={post.username === user.username ? () => handleDeletePost(post.postId) : null}  
               imageUrl={post.imageUrl}
               videoUrl={post.videoUrl}
-              profilePhotoUrl={post.user.profilePhotoUrl}
+              profilePhotoUrl={post.profilePictureUrl} 
             />
             <LikeComponent 
               count={post.likes} 
