@@ -13,12 +13,6 @@ const PostComponent = ({ poster, userId, createdAt, content, imageUrl, videoUrl,
     }
   };
 
-  const isVideoFile = (imgUrl) => {
-    const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi'];
-    const fileExtension = imgUrl.split('.').pop().toLowerCase();
-    return videoExtensions.includes(fileExtension);
-  };
-
   return (
     <div className="mb-4">
       <Link to={`/user/${userId}`} className="username-link">
@@ -44,14 +38,14 @@ const PostComponent = ({ poster, userId, createdAt, content, imageUrl, videoUrl,
       <hr className="my-2"/>
       {imageUrl && (
         <div className="mb-2">
-          {isVideoFile(imageUrl) ? (
-              <video controls className="max-w-full h-auto rounded-md">
-              <source src={imageUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <img src={imageUrl} alt="Post content" className="max-w-full h-auto rounded-md" />
-          )}
+          <img src={imageUrl} alt="Post image" className="max-w-full h-auto rounded-md" />
+        </div>
+      )}
+      {videoUrl && (
+        <div className="mb-2">
+          <video controls className="max-w-full h-auto rounded-md">
+            <source src={videoUrl} type="video/mp4" />
+          </video>
         </div>
       )}
       {isEditing ? (
