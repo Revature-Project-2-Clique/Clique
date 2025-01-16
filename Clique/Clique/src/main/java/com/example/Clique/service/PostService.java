@@ -218,6 +218,8 @@ public class PostService {
         pdto.setPostId(post.getPostId());
         pdto.setUserId(poster.getUserId());
         pdto.setUsername(poster.getUsername());
+        pdto.setProfilePictureUrl(poster.getProfilePictureUrl());
+        
         pdto.setPostText(post.getPostText());
         pdto.setPostedTime(post.getPostedTime());
         pdto.setLikes(reactionRepository.countByPostId(post.getPostId()));
@@ -227,4 +229,5 @@ public class PostService {
         pdto.setVideoUrl(post.getVideoUrl());
         return pdto;
     }
+    
 }
